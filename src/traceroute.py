@@ -5,6 +5,7 @@ import signal
 import time
 from ipaddress import IPv4Address
 from dataclasses import dataclass
+import logging
 
 import requests
 
@@ -48,23 +49,27 @@ def get_ip_info(ip: IPv4Address, timeout: int) -> str:
 
     header = {"user-agent": USER_AGENT}
     query_url = f"http://ip-api.com/json/{ip}?fields=status,message,country,regionName,city,isp,org,as,lat,lon"
+
+    def error(msg: str) -> str:
+        logging.error("%s, query URL: %s, timeout: %d", msg, query_url, timeout)
+        return msg
+
     try:
         response = requests.get(query_url, headers=header, timeout=timeout)
     except requests.exceptions.RequestException as e:
-        return f"No IP info available: Got exception {e.__class__.__name__} when sending request to API, exception message: {e}"
+        return error(f"No IP info available: Got exception {e.__class__.__name__} when sending request to API, exception message: {e}")
 
     if response.status_code != 200:
-        print(f"Non-200 status code {response.status_code} from query at {query_url}", file=sys.stderr)
-        return f"No IP info available: Got status code {response.status_code} from API"
+        return error(f"No IP info available: Got status code {response.status_code} from API")
 
     try:
         ip_info = response.json()
     except requests.exceptions.JSONDecodeError:
-        return "No IP info available: Could not decode JSON response from API"
+        return error("No IP info available: Could not decode JSON response from API")
 
     assert isinstance(ip_info, dict)
     if ip_info["status"] != "success":
-        return f"No IP info available: {ip_info['message']}"
+        return error(f"No IP info available: {ip_info['message']}")
 
     def get(key: str, name: str) -> str:
         value = ip_info.get(key, None)
@@ -121,11 +126,12 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         ihl = version_ihl & (0b1111)
 
         if not (version == 4 and ihl >= 5):
+            logging.debug("Ignoring non-IPv4 packet")
             continue
 
         icmp_packet = data[ihl * 4:]
         if not check_internet_checksum(icmp_packet):
-            print("Invalid ICMP checksum, discarding packet", file=sys.stderr)
+            logging.warning("Invalid ICMP checksum, discarding packet")
             continue
 
         icmp_header = icmp_packet[0:8]
@@ -134,6 +140,7 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         icmp_code = icmp_header[1]
 
         if not ((icmp_type == 11 and icmp_code == 0) or icmp_type == 3):
+            logging.debug("Ignoring irrelevant ICMP packet (not Time Exceeded or Destination Unreachable)")
             continue
 
         embedded_ihl_version = icmp_data[0]
@@ -142,6 +149,7 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         embedded_protocol = icmp_data[9]
 
         if not (embedded_version == 4 and embedded_ihl >= 5 and embedded_protocol == socket.IPPROTO_UDP):
+            logging.debug("Ignoring irrelevant embedded packet (not IPv4 or not UDP)")
             continue
 
         embedded_udp_packet = icmp_data[embedded_ihl * 4:]
@@ -158,11 +166,15 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         #     print("Invalid UDP checksum in packet embedded in ICMP packet, discarding packet", file=sys.stderr)
         #     continue
 
-        if not (embedded_udp_source_port == source_port and embedded_udp_destination_port == destination_port and embedded_udp_length == sent_udp_length):
+        if not (embedded_udp_source_port == source_port and embedded_udp_destination_port == destination_port):
+            logging.debug("Ignoring irrelevant embedded UDP packet (source port or destination port mismatch, not for this traceroute)")
             continue
 
+        if embedded_udp_length != sent_udp_length:
+            logging.warning("Ignoring embedded UDP packet despite matching ports, length mismatch")
+
         if not USER_AGENT_B.startswith(embedded_udp_data):
-            continue
+            logging.warning("Ignoring embedded UDP packet despite matching ports, data mismatch")
 
         return TraceRouteResult(ip=IPv4Address(addr), icmp_type=icmp_type, icmp_code=icmp_code)
 
@@ -190,6 +202,12 @@ ICMP_HUMAN_READABLE_NAMES : dict[tuple[int, int], str] = {
 def main():
     signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit(1)) # exit on Ctrl+C without exception trace
 
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} <destination>", file=sys.stderr)
+        sys.exit(1)
+
+    logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
     timeout = 5
     consecutive_timeout_limit = 10
 
@@ -202,7 +220,7 @@ def main():
         try:
             trace_ip = IPv4Address(socket.gethostbyname(trace_destination))
         except socket.gaierror as e:
-            print(f"Could not resolve IPv4 address for {trace_destination}: {e}")
+            print(f"Could not resolve IPv4 address for {trace_destination}: {e}", file=sys.stderr)
             sys.exit(1)
 
     udp_send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)

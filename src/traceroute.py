@@ -66,11 +66,10 @@ class TraceRouteResult:
     icmp_type: int
     icmp_code: int
 
-def traceroute(ip: IPv4Address, ttl: int, timeout: int, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> TraceRouteResult | None:
+def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> TraceRouteResult | None:
     udp_send_sock.setsockopt(socket.IPPROTO_IP, socket.IP_TTL, ttl)
 
     source_port = udp_send_sock.getsockname()[1] # socket name is (ip, port)
-    destination_port = 32768
 
     content = USER_AGENT_B
     bytes_sent = udp_send_sock.sendto(content, (str(ip), destination_port))
@@ -178,8 +177,13 @@ def main():
 
     only_timeouts = True
     timeouts = 0
+    destination_port = 32768 - 1
     for ttl in range(1, sys.maxsize):
-        traceroute_result = traceroute(trace_ip, ttl, timeout, udp_send_sock, icmp_recv_socket)
+        destination_port += 1
+        if destination_port >= 65536:
+            destination_port = 32768
+
+        traceroute_result = traceroute(trace_ip, destination_port, ttl, timeout, udp_send_sock, icmp_recv_socket)
 
         if traceroute_result is None:
             print(f"{ttl}. ?.?.?.? - No response within {timeout} seconds")

@@ -47,7 +47,7 @@ def get_ip_info(ip: IPv4Address, timeout: int) -> str:
         return "No IP info available: private range"
 
     header = {"user-agent": USER_AGENT}
-    query_url = f"http://ip-api.com/json/{ip}?fields=status,message,country,regionName,city,isp,org,as"
+    query_url = f"http://ip-api.com/json/{ip}?fields=status,message,country,regionName,city,isp,org,as,lat,lon"
     try:
         response = requests.get(query_url, headers=header, timeout=timeout)
     except requests.exceptions.RequestException as e:
@@ -77,8 +77,10 @@ def get_ip_info(ip: IPv4Address, timeout: int) -> str:
     isp = get("isp", "ISP")
     org = get("org", "Organization")
     as_ = get("as", "Autonomous System")
+    lat = ip_info.get("lat", "Lat")
+    lon = ip_info.get("lon", "Lon")
 
-    result = f"{country}, {region}, {city}, {isp}, {org}, {as_}"
+    result = f"{country}, {region}, {city}, {lat}, {lon}, {isp}, {org}, {as_}"
 
     reverse_dns = socket.getfqdn(str(ip))
     if reverse_dns != str(ip):

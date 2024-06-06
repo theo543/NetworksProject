@@ -96,13 +96,12 @@ def main():
 
     if os.name == "nt":
         # Required for ICMP socket on Windows
-        # TODO: this is not enough to work on Windows, WireShark shows the TTL exceeded packets arrive but the socket does not receive them
-        print("WARNING: traceroute.py appears not to receive ICMP TTL exceeded packets on Windows, likely won't work")
         host = socket.gethostbyname(socket.gethostname())
         icmp_recv_socket.bind((host, 0))
         icmp_recv_socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
         icmp_recv_socket.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
 
+    only_timeouts = True
     timeouts = 0
     for ttl in range(1, sys.maxsize):
         hop_ip = traceroute(trace_ip, ttl, udp_send_sock, icmp_recv_socket)
@@ -112,6 +111,7 @@ def main():
         else:
             ip_info = get_ip_info(hop_ip, timeout)
             timeouts = 0
+            only_timeouts = False
         placeholder = "?.?.?.?"
         print(f"{ttl}. {hop_ip or placeholder} - {ip_info}")
         if hop_ip == trace_ip:
@@ -120,6 +120,10 @@ def main():
         if timeouts >= consecutive_timeout_limit:
             print(f"Limit of {consecutive_timeout_limit} consecutive timeouts reached")
             break
+    if only_timeouts:
+        print("Never received any ICMP response during traceroute, check firewall settings")
+        if os.name == "nt":
+            print("Windows Firewall does not allow the necessary incoming ICMP responses by default")
 
     icmp_recv_socket.close()
     udp_send_sock.close()

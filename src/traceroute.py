@@ -4,6 +4,7 @@ import sys
 import signal
 import time
 from ipaddress import IPv4Address
+from dataclasses import dataclass
 
 import requests
 
@@ -48,12 +49,24 @@ def get_ip_info(ip: IPv4Address, timeout: int) -> str:
     org = get("org", "Organization")
     as_ = get("as", "Autonomous System")
 
-    return f"{country}, {region}, {city}, {isp}, {org}, {as_}"
+    result = f"{country}, {region}, {city}, {isp}, {org}, {as_}"
+
+    reverse_dns = socket.getfqdn(str(ip))
+    if reverse_dns != str(ip):
+        result += f", Reverse DNS: {reverse_dns}"
+
+    return result
 
 class UDPSendError(Exception):
     pass
 
-def traceroute(ip: IPv4Address, ttl: int, timeout: int, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> IPv4Address | None:
+@dataclass
+class TraceRouteResult:
+    ip: IPv4Address
+    icmp_type: int
+    icmp_code: int
+
+def traceroute(ip: IPv4Address, ttl: int, timeout: int, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> TraceRouteResult | None:
     udp_send_sock.setsockopt(socket.IPPROTO_IP, socket.IP_TTL, ttl)
 
     source_port = udp_send_sock.getsockname()[1] # socket name is (ip, port)
@@ -110,9 +123,28 @@ def traceroute(ip: IPv4Address, ttl: int, timeout: int, udp_send_sock: socket.so
         if not USER_AGENT_B.startswith(embedded_udp_data):
             continue
 
-        return IPv4Address(addr)
+        return TraceRouteResult(ip=IPv4Address(addr), icmp_type=icmp_type, icmp_code=icmp_code)
 
     return None
+
+ICMP_HUMAN_READABLE_NAMES : dict[tuple[int, int], str] = {
+    (3, 0): "Net Unreachable",
+    (3, 1): "Host Unreachable",
+    (3, 2): "Protocol Unreachable",
+    (3, 3): "Port Unreachable",
+    (3, 4): "Fragmentation Needed and Don't Fragment was Set",
+    (3, 5): "Source Route Failed",
+    (3, 6): "Destination Network Unknown",
+    (3, 7): "Destination Host Unknown",
+    (3, 8): "Source Host Isolated",
+    (3, 9): "Destination Network Administratively Prohibited",
+    (3, 10): "Destination Host Administratively Prohibited",
+    (3, 11): "Destination Network Unreachable for Type of Service",
+    (3, 12): "Destination Host Unreachable for Type of Service",
+    (3, 13): "Communication Administratively Prohibited",
+    (3, 14): "Host Precedence Violation",
+    (3, 15): "Precedence cutoff in effect",
+}
 
 def main():
     signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit(1)) # exit on Ctrl+C without exception trace
@@ -147,22 +179,39 @@ def main():
     only_timeouts = True
     timeouts = 0
     for ttl in range(1, sys.maxsize):
-        hop_ip = traceroute(trace_ip, ttl, timeout, udp_send_sock, icmp_recv_socket)
-        if hop_ip is None:
-            ip_info = f"No response within {timeout} seconds"
+        traceroute_result = traceroute(trace_ip, ttl, timeout, udp_send_sock, icmp_recv_socket)
+
+        if traceroute_result is None:
+            print(f"{ttl}. ?.?.?.? - No response within {timeout} seconds")
             timeouts += 1
+            if timeouts >= consecutive_timeout_limit:
+                print(f"Limit of {consecutive_timeout_limit} consecutive timeouts reached")
+                break
+            continue
+        timeouts = 0
+        only_timeouts = False
+
+        hop_ip = traceroute_result.ip
+        icmp_type = traceroute_result.icmp_type
+        icmp_code = traceroute_result.icmp_code
+
+        ip_info = get_ip_info(hop_ip, timeout)
+
+        if traceroute_result.icmp_type == 3:
+            icmp_response = ICMP_HUMAN_READABLE_NAMES.get((icmp_type, icmp_code), f"Type {icmp_type}, Code {icmp_code}")
+            icmp_response_info = f", ICMP Response: {icmp_response}"
         else:
-            ip_info = get_ip_info(hop_ip, timeout)
-            timeouts = 0
-            only_timeouts = False
-        placeholder = "?.?.?.?"
-        print(f"{ttl}. {hop_ip or placeholder} - {ip_info}")
+            icmp_response_info = ""
+
+        print(f"{ttl}. {hop_ip} - {ip_info}{icmp_response_info}")
+
         if hop_ip == trace_ip:
             print("Reached destination")
             break
-        if timeouts >= consecutive_timeout_limit:
-            print(f"Limit of {consecutive_timeout_limit} consecutive timeouts reached")
-            break
+
+        if traceroute_result.icmp_type == 3:
+            print("Last hop received Destination Unreachable, stopping traceroute")
+
     if only_timeouts:
         print("Never received any ICMP response during traceroute, check firewall settings")
         if os.name == "nt":

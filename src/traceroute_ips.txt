@@ -1,0 +1,36 @@
+130.162.231.204 networks-homework-vps.developer.li
+
+208.67.220.220
+8.8.8.8 dns.google
+
+# Romania
+80.96.21.209 unibuc.ro
+80.96.21.88 fmi.unibuc.ro
+193.226.51.38 cs.unibuc.ro
+176.223.120.74 primariacraiova.ro
+81.196.1.152 digi.ro
+81.196.1.156 digi.ro
+192.162.16.109 rotld.ro
+
+# Asia
+67.225.169.124 www.dot.asia
+42.83.144.13 www.cnnic.cn
+182.131.26.231 www.cnnic.cn
+
+# Australia
+104.17.237.107 www.auda.org.au
+104.17.238.107 www.auda.org.au
+
+# United States
+128.171.133.42 www.hawaii.edu
+44.217.225.2 www.about.us
+54.243.214.218 www.about.us
+192.0.66.168 www.whitehouse.gov
+
+# Canada
+104.22.75.135 www.cira.ca
+172.67.30.27 www.cira.ca
+104.22.74.135 www.cira.ca
+
+# Africa
+129.232.136.214 registry.africa

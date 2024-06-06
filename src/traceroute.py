@@ -13,6 +13,35 @@ USER_AGENT_B = USER_AGENT.encode("ascii")
 
 # cSpell: ignoreRegExp socket.\w+
 
+def ones_complement_sum(a, b):
+    # RFC 1071:
+    # On a 2's complement machine, the 1's complement sum must be
+    # computed by means of an "end around carry", i.e., any overflows
+    # from the most significant bits are added into the least
+    # significant bits. See the examples below
+    c = a + b
+    c_without_overflows = c & 0xffff
+    c_overflows_shifted = c >> 16
+    return c_without_overflows + c_overflows_shifted
+
+def check_internet_checksum(data: bytes) -> bool:
+    # RFC 1071:
+    # Adjacent octets to be checksummed are paired to form 16-bit
+    # integers, and the 1's complement sum of these 16-bit integers is
+    # formed.
+    checksum = 0
+    for i in range(1, len(data), 2):
+        checksum = ones_complement_sum(checksum, int.from_bytes(data[i-1:i+1], "big"))
+    if len(data) % 2 == 1:
+        padded_last_byte = data[-1:] + bytes([0])
+        checksum = ones_complement_sum(checksum, int.from_bytes(padded_last_byte, "big"))
+    # RFC 1071:
+    # To check a checksum, the 1's complement sum is computed over the
+    # same set of octets, including the checksum field.  If the result
+    # is all 1 bits (-0 in 1's complement arithmetic), the check
+    # succeeds.
+    return checksum == 0xffff
+
 def get_ip_info(ip: IPv4Address, timeout: int) -> str:
     if ip.is_private:
         return "No IP info available: private range"
@@ -92,11 +121,15 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         if not (version == 4 and ihl >= 5):
             continue
 
-        icmp_header = data[ihl * 4:ihl * 4 + 8]
-        icmp_data = data[ihl * 4 + 8:]
+        icmp_packet = data[ihl * 4:]
+        if not check_internet_checksum(icmp_packet):
+            print("Invalid ICMP checksum, discarding packet", file=sys.stderr)
+            continue
+
+        icmp_header = icmp_packet[0:8]
+        icmp_data = icmp_packet[8:]
         icmp_type = icmp_header[0]
         icmp_code = icmp_header[1]
-        # TODO: calculate checksum and check if it's correct
 
         if not ((icmp_type == 11 and icmp_code == 0) or icmp_type == 3):
             continue
@@ -109,12 +142,19 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         if not (embedded_version == 4 and embedded_ihl >= 5 and embedded_protocol == socket.IPPROTO_UDP):
             continue
 
-        embedded_udp_header = icmp_data[embedded_ihl * 4:embedded_ihl * 4 + 8]
+        embedded_udp_packet = icmp_data[embedded_ihl * 4:]
+        embedded_udp_header = embedded_udp_packet[0:8]
+        embedded_udp_data = embedded_udp_packet[8:]
         embedded_udp_source_port = int.from_bytes(embedded_udp_header[0:2], "big")
         embedded_udp_destination_port = int.from_bytes(embedded_udp_header[2:4], "big")
         embedded_udp_length = int.from_bytes(embedded_udp_header[4:6], "big")
-        # TODO: embedded_udp_checksum = int.from_bytes(embedded_udp_header[6:8], "big")
-        embedded_udp_data = icmp_data[embedded_ihl * 4 + 8:]
+
+        # Checking the UDP checksum doesn't work, since NAT changes the source address and that goes into the checksum
+        # embedded_udp_checksum = int.from_bytes(embedded_udp_header[6:8], "big")
+        # udp_pseudo_header = icmp_data[12:20] + bytes([0, socket.IPPROTO_UDP]) + int.to_bytes(sent_udp_length, 2, "big")
+        # if not (embedded_udp_checksum == 0 or check_internet_checksum(udp_pseudo_header + embedded_udp_header + embedded_udp_data)):
+        #     print("Invalid UDP checksum in packet embedded in ICMP packet, discarding packet", file=sys.stderr)
+        #     continue
 
         if not (embedded_udp_source_port == source_port and embedded_udp_destination_port == destination_port and embedded_udp_length == sent_udp_length):
             continue

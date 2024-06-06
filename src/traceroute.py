@@ -2,6 +2,7 @@ import socket
 import os
 import sys
 import signal
+import time
 from ipaddress import IPv4Address
 
 import requests
@@ -52,23 +53,66 @@ def get_ip_info(ip: IPv4Address, timeout: int) -> str:
 class UDPSendError(Exception):
     pass
 
-def traceroute(ip: IPv4Address, ttl: int, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> IPv4Address | None:
+def traceroute(ip: IPv4Address, ttl: int, timeout: int, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> IPv4Address | None:
     udp_send_sock.setsockopt(socket.IPPROTO_IP, socket.IP_TTL, ttl)
 
-    destination_port = 65535
+    source_port = udp_send_sock.getsockname()[1] # socket name is (ip, port)
+    destination_port = 32768
 
     content = USER_AGENT_B
     bytes_sent = udp_send_sock.sendto(content, (str(ip), destination_port))
     if bytes_sent != len(content):
         raise UDPSendError(f"Could not send all {len(content)} bytes to {ip}:{destination_port}")
-    try:
-        # TODO: check _data to see if the response is TTL exceeded, destination unreachable, or port unreachable
-        # TODO: TTL exceeded includes source, destination, length, checksum, check if it's from this traceroute
-        # TODO: some routers send more than 8 bytes even though only 8 are required, if so check that as well
-        _data, (addr, _port) = icmp_recv_socket.recvfrom(63535)
+    sent_udp_length = bytes_sent + 8 # UDP header is 8 bytes
+
+    start_time = time.time()
+    while (time.time() - start_time) < timeout:
+        icmp_recv_socket.settimeout(timeout - (time.time() - start_time))
+        try:
+            data, (addr, _port) = icmp_recv_socket.recvfrom(63535)
+        except TimeoutError:
+            break
+
+        version_ihl = data[0]
+        version = version_ihl >> 4
+        ihl = version_ihl & (0b1111)
+
+        if not (version == 4 and ihl >= 5):
+            continue
+
+        icmp_header = data[ihl * 4:ihl * 4 + 8]
+        icmp_data = data[ihl * 4 + 8:]
+        icmp_type = icmp_header[0]
+        icmp_code = icmp_header[1]
+        # TODO: calculate checksum and check if it's correct
+
+        if not ((icmp_type == 11 and icmp_code == 0) or icmp_type == 3):
+            continue
+
+        embedded_ihl_version = icmp_data[0]
+        embedded_version = embedded_ihl_version >> 4
+        embedded_ihl = embedded_ihl_version & (0b1111)
+        embedded_protocol = icmp_data[9]
+
+        if not (embedded_version == 4 and embedded_ihl >= 5 and embedded_protocol == socket.IPPROTO_UDP):
+            continue
+
+        embedded_udp_header = icmp_data[embedded_ihl * 4:embedded_ihl * 4 + 8]
+        embedded_udp_source_port = int.from_bytes(embedded_udp_header[0:2], "big")
+        embedded_udp_destination_port = int.from_bytes(embedded_udp_header[2:4], "big")
+        embedded_udp_length = int.from_bytes(embedded_udp_header[4:6], "big")
+        # TODO: embedded_udp_checksum = int.from_bytes(embedded_udp_header[6:8], "big")
+        embedded_udp_data = icmp_data[embedded_ihl * 4 + 8:]
+
+        if not (embedded_udp_source_port == source_port and embedded_udp_destination_port == destination_port and embedded_udp_length == sent_udp_length):
+            continue
+
+        if not USER_AGENT_B.startswith(embedded_udp_data):
+            continue
+
         return IPv4Address(addr)
-    except TimeoutError as _e:
-        return None
+
+    return None
 
 def main():
     signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit(1)) # exit on Ctrl+C without exception trace
@@ -92,7 +136,6 @@ def main():
     udp_send_sock.bind(("", 0)) # let the OS choose a source port
 
     icmp_recv_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
-    icmp_recv_socket.settimeout(timeout)
 
     if os.name == "nt":
         # Required for ICMP socket on Windows
@@ -104,7 +147,7 @@ def main():
     only_timeouts = True
     timeouts = 0
     for ttl in range(1, sys.maxsize):
-        hop_ip = traceroute(trace_ip, ttl, udp_send_sock, icmp_recv_socket)
+        hop_ip = traceroute(trace_ip, ttl, timeout, udp_send_sock, icmp_recv_socket)
         if hop_ip is None:
             ip_info = f"No response within {timeout} seconds"
             timeouts += 1

@@ -173,7 +173,8 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         if embedded_udp_length != sent_udp_length:
             logging.warning("Ignoring embedded UDP packet despite matching ports, length mismatch")
 
-        if not USER_AGENT_B.startswith(embedded_udp_data):
+        # Some routers seem to send back the entire packet, but with some extra data at the end, so check both ways
+        if not (USER_AGENT_B.startswith(embedded_udp_data) or embedded_udp_data.startswith(USER_AGENT_B)):
             logging.warning("Ignoring embedded UDP packet despite matching ports, data mismatch")
 
         return TraceRouteResult(ip=IPv4Address(addr), icmp_type=icmp_type, icmp_code=icmp_code)

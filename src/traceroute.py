@@ -159,12 +159,12 @@ def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, u
         embedded_udp_destination_port = int.from_bytes(embedded_udp_header[2:4], "big")
         embedded_udp_length = int.from_bytes(embedded_udp_header[4:6], "big")
 
-        # Checking the UDP checksum doesn't work, since NAT changes the source address and that goes into the checksum
-        # embedded_udp_checksum = int.from_bytes(embedded_udp_header[6:8], "big")
-        # udp_pseudo_header = icmp_data[12:20] + bytes([0, socket.IPPROTO_UDP]) + int.to_bytes(sent_udp_length, 2, "big")
-        # if not (embedded_udp_checksum == 0 or check_internet_checksum(udp_pseudo_header + embedded_udp_header + embedded_udp_data)):
-        #     print("Invalid UDP checksum in packet embedded in ICMP packet, discarding packet", file=sys.stderr)
-        #     continue
+        embedded_udp_checksum = int.from_bytes(embedded_udp_header[6:8], "big")
+        embedded_ip_src_dst = icmp_data[12:20]
+        udp_pseudo_header = embedded_ip_src_dst + bytes([0, socket.IPPROTO_UDP]) + int.to_bytes(sent_udp_length, 2, "big")
+        if not (embedded_udp_checksum == 0 or check_internet_checksum(udp_pseudo_header + embedded_udp_header + USER_AGENT_B)):
+            logging.warning("Invalid UDP checksum in packet embedded in ICMP packet, discarding packet")
+            continue
 
         if not (embedded_udp_source_port == source_port and embedded_udp_destination_port == destination_port):
             logging.debug("Ignoring irrelevant embedded UDP packet (source port or destination port mismatch, not for this traceroute)")

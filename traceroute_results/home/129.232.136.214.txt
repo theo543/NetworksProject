@@ -1,0 +1,29 @@
+1. 192.168.1.1 - No IP info available: private range
+2. 10.0.0.1 - No IP info available: private range
+3. 172.19.210.145 - No IP info available: private range
+4. 10.220.185.178 - No IP info available: private range
+5. 10.220.187.203 - No IP info available: private range
+6. 195.66.227.22 - Country: "United Kingdom", Region: "England", City: "London", 51.5108, -0.0810928, ISP: "Superonline Iletisim Hizmetleri A.S.", Organization: "London Internet Exchange Limited", Autonomous System: "AS34984 Superonline Iletisim Hizmetleri A.S."
+7. 105.16.11.5 - Country: "Mauritius", Region: "Port Louis District", City: "Port Louis", -20.1609, 57.5012, ISP: "SEACOM Limited Networks", Organization: "", Autonomous System: "AS37100 SEACOM Limited", Reverse DNS: ae-5.er-05-lhr.uk.seacomnet.com
+8. 105.16.9.25 - Country: "Mauritius", Region: "Port Louis District", City: "Port Louis", -20.1609, 57.5012, ISP: "SEACOM Limited Networks", Organization: "", Autonomous System: "AS37100 SEACOM Limited", Reverse DNS: xe-0-0-32-1.cr-01-lhr.uk.seacomnet.com
+9. 105.16.10.201 - Country: "Mauritius", Region: "Port Louis District", City: "Port Louis", -20.1609, 57.5012, ISP: "SEACOM Limited Networks", Organization: "", Autonomous System: "AS37100 SEACOM Limited", Reverse DNS: ae-0.cr-02-cpt-za-seacomnet.com
+10. 105.16.31.10 - Country: "South Africa", Region: "Western Cape", City: "Cape Town", -34.0486, 18.4811, ISP: "SEACOM Limited Networks", Organization: "", Autonomous System: "AS37100 SEACOM Limited", Reverse DNS: xe-1-0-0-0.er-02-cpt.za.seacomnet.com
+11. 105.22.72.214 - Country: "South Africa", Region: "Western Cape", City: "Cape Town", -33.91, 18.4304, ISP: "SEACOM Limited Networks", Organization: "", Autonomous System: "AS37100 SEACOM Limited"
+12. 41.84.12.28 - Country: "South Africa", Region: "Gauteng", City: "Sandton", -26.0123, 28.1118, ISP: "Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Organization: "", Autonomous System: "AS37179 Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Reverse DNS: core.100g-0-8-0-wc-ro-ter-scp-2.za.africainx.net
+13. 41.84.12.26 - Country: "South Africa", Region: "Gauteng", City: "Sandton", -26.0123, 28.1118, ISP: "Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Organization: "", Autonomous System: "AS37179 Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Reverse DNS: core.100g-0-8-0-wc-ro-ter-scp-1.za.africainx.net
+14. 41.84.12.41 - Country: "South Africa", Region: "Gauteng", City: "Sandton", -26.0123, 28.1118, ISP: "Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Organization: "", Autonomous System: "AS37179 Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Reverse DNS: core.xe-0-0-1-gp-cn-r21-mee-1.za.africainx.net
+15. 41.84.12.37 - Country: "South Africa", Region: "Gauteng", City: "Sandton", -26.0123, 28.1118, ISP: "Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Organization: "", Autonomous System: "AS37179 Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Reverse DNS: core-xe-0-2-2-gp-rb-pkl-scp-1.za.africainx.net
+16. 41.84.12.161 - Country: "South Africa", Region: "Gauteng", City: "Sandton", -26.0123, 28.1118, ISP: "Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Organization: "", Autonomous System: "AS37179 Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Reverse DNS: core.xge-0-2-1-gp-sm-het-scp-1.za.africainx.net
+17. 41.66.132.246 - Country: "South Africa", Region: "Gauteng", City: "Pretoria", -25.7599, 28.2604, ISP: "Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Organization: "", Autonomous System: "AS37179 Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Reverse DNS: 41-66-132-246-f6.hetzner-jhb-ip4-gw.africainx.net
+18. 41.66.132.246 - Country: "South Africa", Region: "Gauteng", City: "Pretoria", -25.7599, 28.2604, ISP: "Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Organization: "", Autonomous System: "AS37179 Africa Independent Network Exchange (Pty) LTD (AfricaINX)", Reverse DNS: 41-66-132-246-f6.hetzner-jhb-ip4-gw.africainx.net
+19. ?.?.?.? - No response within 5 seconds
+20. ?.?.?.? - No response within 5 seconds
+21. ?.?.?.? - No response within 5 seconds
+22. ?.?.?.? - No response within 5 seconds
+23. ?.?.?.? - No response within 5 seconds
+24. ?.?.?.? - No response within 5 seconds
+25. ?.?.?.? - No response within 5 seconds
+26. ?.?.?.? - No response within 5 seconds
+27. ?.?.?.? - No response within 5 seconds
+28. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

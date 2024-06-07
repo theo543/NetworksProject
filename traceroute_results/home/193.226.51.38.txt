@@ -1,0 +1,11 @@
+1. 192.168.1.1 - No IP info available: private range
+2. 10.0.0.1 - No IP info available: private range
+3. 10.30.4.193 - No IP info available: private range
+4. 10.220.185.178 - No IP info available: private range
+5. 10.220.208.102 - No IP info available: private range
+6. 81.196.1.206 - Country: "Romania", Region: "București", City: "Sector 1", 44.4964, 26.0478, ISP: "RCS & RDS", Organization: "RCS & RDS Business", Autonomous System: "AS8708 RCS & RDS", Reverse DNS: roedunet.bucuresti.rdsnet.ro
+7. 37.128.239.41 - Country: "Romania", Region: "București", City: "Bucharest", 44.4444, 26.0964, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare", Reverse DNS: te-4-3.core2.nat.roedu.net
+8. 37.128.232.34 - Country: "Romania", Region: "București", City: "Bucharest", 44.4268, 26.1025, ISP: "Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si C", Organization: "AARNIEC RoEduNet NOCs", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare"
+9. 37.128.230.74 - Country: "Romania", Region: "București", City: "Bucharest", 44.4447, 26.0959, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare"
+10. 193.226.51.38 - Country: "Romania", Region: "București", City: "Bucharest", 44.4299, 26.0632, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS6693 Universitatea Bucuresti", Reverse DNS: cs.unibuc.ro
+Reached destination

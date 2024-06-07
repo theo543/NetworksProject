@@ -1,0 +1,10 @@
+1. 192.168.1.1 - No IP info available: private range
+2. 10.0.0.1 - No IP info available: private range
+3. 10.30.4.193 - No IP info available: private range
+4. 10.220.185.178 - No IP info available: private range
+5. 10.220.149.27 - No IP info available: private range
+6. 62.115.180.105 - Country: "Romania", Region: "București", City: "Bucharest", 44.4268, 26.1025, ISP: "Arelion Sweden AB", Organization: "Arelion Sweden AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: buca-b3-link.ip.twelve99.net
+7. 62.115.114.112 - Country: "Austria", Region: "Vienna", City: "Vienna", 48.2081, 16.3713, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: win-bb2-link.ip.twelve99.net
+8. 140.91.198.51 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+9. 130.162.231.204 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Cloud Infrastructure (eu-frankfurt-1)", Autonomous System: "AS31898 Oracle Corporation", ICMP Response: Port Unreachable
+Reached destination

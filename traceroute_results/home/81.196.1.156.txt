@@ -1,0 +1,15 @@
+1. 192.168.1.1 - No IP info available: private range
+2. 10.0.0.1 - No IP info available: private range
+3. 10.30.4.193 - No IP info available: private range
+4. 10.220.132.161 - No IP info available: private range
+5. ?.?.?.? - No response within 5 seconds
+6. ?.?.?.? - No response within 5 seconds
+7. ?.?.?.? - No response within 5 seconds
+8. ?.?.?.? - No response within 5 seconds
+9. ?.?.?.? - No response within 5 seconds
+10. ?.?.?.? - No response within 5 seconds
+11. ?.?.?.? - No response within 5 seconds
+12. ?.?.?.? - No response within 5 seconds
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

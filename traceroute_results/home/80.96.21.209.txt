@@ -1,0 +1,20 @@
+1. 192.168.1.1 - No IP info available: private range
+2. 10.0.0.1 - No IP info available: private range
+3. 172.19.210.145 - No IP info available: private range
+4. 10.220.185.178 - No IP info available: private range
+5. ?.?.?.? - No response within 5 seconds
+6. 92.87.1.229 - Country: "Romania", Region: "București", City: "Bucharest", 44.4946, 26.0578, ISP: "Orange Romania Communication S.A", Organization: "Romtelecom", Autonomous System: "AS9050 ORANGE ROMANIA COMMUNICATION S.A"
+7. 10.0.241.229 - No IP info available: private range
+8. 92.86.30.10 - Country: "Romania", Region: "Botoșani County", City: "Flămânzi", 47.5483, 26.8613, ISP: "Romtelecom", Organization: "", Autonomous System: "AS9050 ORANGE ROMANIA COMMUNICATION S.A", Reverse DNS: adsl92-86-30-10.romtelecom.net
+9. 10.255.10.1 - No IP info available: private range
+10. ?.?.?.? - No response within 5 seconds
+11. ?.?.?.? - No response within 5 seconds
+12. ?.?.?.? - No response within 5 seconds
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+16. ?.?.?.? - No response within 5 seconds
+17. ?.?.?.? - No response within 5 seconds
+18. ?.?.?.? - No response within 5 seconds
+19. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

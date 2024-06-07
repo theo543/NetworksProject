@@ -1,0 +1,29 @@
+1. 192.168.1.1 - No IP info available: private range
+2. 10.0.0.1 - No IP info available: private range
+3. 10.30.4.193 - No IP info available: private range
+4. 10.220.185.178 - No IP info available: private range
+5. ?.?.?.? - No response within 5 seconds
+6. 62.115.180.105 - Country: "Romania", Region: "București", City: "Bucharest", 44.4268, 26.1025, ISP: "Arelion Sweden AB", Organization: "Arelion Sweden AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: buca-b3-link.ip.twelve99.net
+7. 62.115.114.110 - Country: "Austria", Region: "Vienna", City: "Vienna", 48.2081, 16.3713, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: win-bb1-link.ip.twelve99.net
+8. 154.54.59.177 - Country: "United States", Region: "District of Columbia", City: "Washington", 38.894, -77.0365, ISP: "Cogent Communications", Organization: "Cogent communications - IPENG", Autonomous System: "AS174 Cogent Communications", Reverse DNS: be3263.ccr22.bts01.atlas.cogentco.com
+9. 154.54.59.86 - Country: "United States", Region: "District of Columbia", City: "Washington", 38.894, -77.0365, ISP: "Cogent Communications", Organization: "Cogent communications - IPENG", Autonomous System: "AS174 Cogent Communications", Reverse DNS: be2988.ccr51.vie01.atlas.cogentco.com
+10. ?.?.?.? - No response within 5 seconds
+11. ?.?.?.? - No response within 5 seconds
+12. 130.117.0.141 - Country: "United States", Region: "District of Columbia", City: "Washington", 38.894, -77.0365, ISP: "Cogent Communications", Organization: "", Autonomous System: "AS174 Cogent Communications", Reverse DNS: be2814.ccr42.ams03.atlas.cogentco.com
+13. 154.54.77.246 - Country: "United States", Region: "District of Columbia", City: "Washington", 38.894, -77.0365, ISP: "Cogent Communications", Organization: "Cogent communications - IPENG", Autonomous System: "AS174 Cogent Communications", Reverse DNS: be2182.ccr21.lpl01.atlas.cogentco.com
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+16. 38.122.231.170 - Country: "Canada", Region: "Quebec", City: "Montreal", 45.5075, -73.5887, ISP: "Cogent Communications", Organization: "", Autonomous System: "AS174 Cogent Communications"
+17. ?.?.?.? - No response within 5 seconds
+18. 52.94.81.237 - Country: "Canada", Region: "Ontario", City: "Toronto", 43.6532, -79.3832, ISP: "Amazon.com, Inc.", Organization: "Amazon Technologies Inc. (ca-central-1)", Autonomous System: "AS16509 Amazon.com, Inc."
+19. ?.?.?.? - No response within 5 seconds
+20. ?.?.?.? - No response within 5 seconds
+21. ?.?.?.? - No response within 5 seconds
+22. ?.?.?.? - No response within 5 seconds
+23. ?.?.?.? - No response within 5 seconds
+24. ?.?.?.? - No response within 5 seconds
+25. ?.?.?.? - No response within 5 seconds
+26. ?.?.?.? - No response within 5 seconds
+27. ?.?.?.? - No response within 5 seconds
+28. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

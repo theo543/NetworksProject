@@ -1,0 +1,24 @@
+1. 192.168.248.193 - No IP info available: private range
+2. 62.217.248.130 - Country: "Romania", Region: "București", City: "Bucharest", 44.4152, 26.166, ISP: "Orange Romania Network", Organization: "", Autonomous System: "AS8953 Orange Romania S.A."
+3. ?.?.?.? - No response within 5 seconds
+4. ?.?.?.? - No response within 5 seconds
+5. ?.?.?.? - No response within 5 seconds
+6. ?.?.?.? - No response within 5 seconds
+7. ?.?.?.? - No response within 5 seconds
+8. 62.115.114.110 - Country: "Austria", Region: "Vienna", City: "Vienna", 48.2081, 16.3713, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: win-bb1-link.ip.twelve99.net
+9. 62.115.138.22 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ffm-bb2-link.ip.twelve99.net
+10. 62.115.122.138 - Country: "France", Region: "Île-de-France", City: "Paris", 48.8566, 2.35222, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: prs-bb2-link.ip.twelve99.net
+11. 62.115.137.5 - Country: "France", Region: "Île-de-France", City: "Paris", 48.8566, 2.35222, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: prs-bb2-link.ip.twelve99.net
+12. ?.?.?.? - No response within 5 seconds
+13. 62.115.11.249 - Country: "France", Region: "Île-de-France", City: "Paris", 48.8575, 2.35138, ISP: "Arelion Sweden AB", Organization: "Arelion Sweden AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: amazon-ic-333120.ip.twelve99-cust.net
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+16. ?.?.?.? - No response within 5 seconds
+17. ?.?.?.? - No response within 5 seconds
+18. ?.?.?.? - No response within 5 seconds
+19. ?.?.?.? - No response within 5 seconds
+20. ?.?.?.? - No response within 5 seconds
+21. ?.?.?.? - No response within 5 seconds
+22. ?.?.?.? - No response within 5 seconds
+23. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

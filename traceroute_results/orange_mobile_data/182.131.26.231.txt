@@ -1,0 +1,31 @@
+1. 192.168.248.193 - No IP info available: private range
+2. ?.?.?.? - No response within 5 seconds
+3. ?.?.?.? - No response within 5 seconds
+4. ?.?.?.? - No response within 5 seconds
+5. 93.122.133.92 - Country: "Romania", Region: "Ilfov", City: "Otopeni", 44.55, 26.0724, ISP: "Orange Romania Network", Organization: "Orange Romania SA", Autonomous System: "AS8953 Orange Romania S.A."
+6. ?.?.?.? - No response within 5 seconds
+7. ?.?.?.? - No response within 5 seconds
+8. 62.115.114.110 - Country: "Austria", Region: "Vienna", City: "Vienna", 48.2081, 16.3713, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: win-bb1-link.ip.twelve99.net
+9. 62.115.138.22 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ffm-bb2-link.ip.twelve99.net
+10. 62.115.122.138 - Country: "France", Region: "Île-de-France", City: "Paris", 48.8566, 2.35222, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: prs-bb2-link.ip.twelve99.net
+11. 62.115.133.238 - Country: "United Kingdom", Region: "England", City: "London", 51.5072, -0.127586, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ldn-bb2-link.ip.twelve99.net
+12. 62.115.120.239 - Country: "United Kingdom", Region: "England", City: "London", 51.4985, -0.0148113, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ldn-b2-link.ip.twelve99.net
+13. 80.91.249.10 - Country: "Poland", Region: "Mazovia", City: "Warsaw", 52.2297, 21.0122, ISP: "Arelion Sweden AB", Organization: "Arelion Sweden AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ldn-bb1-link.ip.twelve99.net
+14. 62.115.122.189 - Country: "United Kingdom", Region: "England", City: "London", 51.4985, -0.0148113, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ldn-b2-link.ip.twelve99.net
+15. 62.115.14.114 - Country: "United Kingdom", Region: "England", City: "London", 51.4985, -0.0148113, ISP: "Arelion Sweden AB", Organization: "Arelion Sweden AB", Autonomous System: "AS1299 Arelion Sweden AB"
+16. ?.?.?.? - No response within 5 seconds
+17. ?.?.?.? - No response within 5 seconds
+18. ?.?.?.? - No response within 5 seconds
+19. ?.?.?.? - No response within 5 seconds
+20. 221.236.8.14 - Country: "China", Region: "Sichuan", City: "Chengdu", 30.5728, 104.067, ISP: "CHINANET SiChuan Telecom Internet Data Center", Organization: "Chinanet SC", Autonomous System: "AS38283 CHINANET SiChuan Telecom Internet Data Center", Reverse DNS: 14.8.236.221.broad.cd.sc.dynamic.163data.com.cn
+21. ?.?.?.? - No response within 5 seconds
+22. ?.?.?.? - No response within 5 seconds
+23. ?.?.?.? - No response within 5 seconds
+24. ?.?.?.? - No response within 5 seconds
+25. ?.?.?.? - No response within 5 seconds
+26. ?.?.?.? - No response within 5 seconds
+27. ?.?.?.? - No response within 5 seconds
+28. ?.?.?.? - No response within 5 seconds
+29. ?.?.?.? - No response within 5 seconds
+30. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

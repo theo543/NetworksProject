@@ -34,3 +34,4 @@
 
 # Africa
 129.232.136.214 registry.africa
+196.29.59.9 registry.net.za

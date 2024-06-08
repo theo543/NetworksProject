@@ -36,6 +36,7 @@ class DNSPacket:
     authoritative_answer: bool
     truncation: bool
     recursion_desired: bool
+    reserved: int
     recursion_available: bool
     response_code: ResponseCode
     questions: list[DNSQuestion]
@@ -45,6 +46,7 @@ class DNSPacket:
 
     def __post_init__(self):
         assert has_bits(self.request_id, 16)
+        assert has_bits(self.reserved, 3)
         assert has_bits(len(self.questions), 16)
         assert has_bits(len(self.answers), 16)
         assert has_bits(len(self.authorities), 16)
@@ -125,7 +127,7 @@ def dns_packet_from_bytes(data: bytes) -> DNSPacket:
         truncation = (flags[0] & 0b00000010) != 0
         recursion_desired = (flags[0] & 0b00000001) != 0
         recursion_available = (flags[1] & 0b10000000) != 0
-        supported_check((flags[1] & 0b01110000) == 0) # reserved bits must be 0
+        reserved = (flags[1] & 0b01110000) >> 4
         response_code = ResponseCode(flags[1] & 0b00001111)
         qdcount = from_ne(data[4:6])
         ancount = from_ne(data[6:8])
@@ -139,17 +141,18 @@ def dns_packet_from_bytes(data: bytes) -> DNSPacket:
         offset, additional = resource_records_from_bytes(data, offset, arcount)
 
         return DNSPacket(
-            request_id,
-            is_response,
-            authoritative_answer,
-            truncation,
-            recursion_desired,
-            recursion_available,
-            response_code,
-            questions,
-            answers,
-            authorities,
-            additional,
+            request_id=request_id,
+            is_response=is_response,
+            authoritative_answer=authoritative_answer,
+            truncation=truncation,
+            recursion_desired=recursion_desired,
+            reserved=reserved,
+            recursion_available=recursion_available,
+            response_code=response_code,
+            questions=questions,
+            answers=answers,
+            authorities=authorities,
+            additional=additional,
         )
     except IndexError as exc:
         raise DNSFormatError() from exc
@@ -219,7 +222,8 @@ def dns_packet_to_bytes(packet: DNSPacket) -> bytes:
     )
     buf.append(
         0b10000000 * packet.recursion_available +
-        packet.response_code.value,
+        (packet.reserved << 4) + # 0b01110000
+        packet.response_code.value, # 0b00001111
     )
     buf += to_ne(len(packet.questions), 2)
     buf += to_ne(len(packet.answers), 2)

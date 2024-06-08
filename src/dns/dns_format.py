@@ -10,6 +10,7 @@ class DNSFormatError(Exception):
     pass
 
 def to_ne(data: int, size: int) -> bytes:
+    assert has_bits(data, size * 8)
     return data.to_bytes(size, "big")
 
 def from_ne(data: bytes) -> int:
@@ -205,3 +206,60 @@ def domain_name_from_bytes(data: bytes, offset: int) -> tuple[int, DomainName]:
             break
 
     return offset, DomainName(labels)
+
+def dns_packet_to_bytes(packet: DNSPacket) -> bytes:
+    buf = bytearray()
+
+    buf += to_ne(packet.request_id, 2)
+    buf.append(
+        0b10000000 * packet.is_response +
+        0b00000100 * packet.authoritative_answer +
+        0b00000010 * packet.truncation +
+        0b00000001 * packet.recursion_desired
+    )
+    buf.append(
+        0b10000000 * packet.recursion_available +
+        packet.response_code.value,
+    )
+    buf += to_ne(len(packet.questions), 2)
+    buf += to_ne(len(packet.answers), 2)
+    buf += to_ne(len(packet.authorities), 2)
+    buf += to_ne(len(packet.additional), 2)
+    buf += questions_to_bytes(packet.questions)
+    buf += resource_records_to_bytes(packet.answers)
+    buf += resource_records_to_bytes(packet.authorities)
+    buf += resource_records_to_bytes(packet.additional)
+
+    return bytes(buf)
+
+def questions_to_bytes(questions: list[DNSQuestion]) -> bytes:
+    buf = bytearray()
+
+    for question in questions:
+        buf += domain_name_to_bytes(question.name)
+        buf += to_ne(question.qtype, 2)
+        buf += to_ne(1, 2) # IN class
+
+    return bytes(buf)
+
+def resource_records_to_bytes(records: list[DNSResourceRecord]) -> bytes:
+    buf = bytearray()
+
+    for record in records:
+        buf += domain_name_to_bytes(record.name)
+        buf += to_ne(record.type_, 2)
+        buf += to_ne(1, 2) # IN class
+        buf += to_ne(record.ttl, 4)
+        buf += to_ne(len(record.data), 2)
+        buf += record.data
+
+    return bytes(buf)
+
+def domain_name_to_bytes(name: DomainName) -> bytes:
+    buf = bytearray()
+
+    for label in name.labels:
+        buf.append(len(label))
+        buf += label
+
+    return bytes(buf)

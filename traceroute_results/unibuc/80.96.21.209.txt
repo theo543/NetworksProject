@@ -1,0 +1,13 @@
+1. 10.11.0.1 - No IP info available: private range
+2. 10.255.10.1 - No IP info available: private range
+3. ?.?.?.? - No response within 0.5 seconds
+4. ?.?.?.? - No response within 0.5 seconds
+5. ?.?.?.? - No response within 0.5 seconds
+6. ?.?.?.? - No response within 0.5 seconds
+7. ?.?.?.? - No response within 0.5 seconds
+8. ?.?.?.? - No response within 0.5 seconds
+9. ?.?.?.? - No response within 0.5 seconds
+10. ?.?.?.? - No response within 0.5 seconds
+11. ?.?.?.? - No response within 0.5 seconds
+12. ?.?.?.? - No response within 0.5 seconds
+Limit of 10 consecutive timeouts reached

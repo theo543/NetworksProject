@@ -16,14 +16,6 @@ def to_ne(data: int, size: int) -> bytes:
 def from_ne(data: bytes) -> int:
     return int.from_bytes(data, "big")
 
-def supported_check(check_result: bool):
-    if not check_result:
-        raise DNSNotSupportedError()
-
-def assert_fmt(check_result: bool):
-    if not check_result:
-        raise DNSFormatError()
-
 def has_bits(value: int, bits: int) -> bool:
     return 0 <= value < (1 << bits)
 
@@ -64,8 +56,7 @@ class ResponseCode(Enum):
 class DNSQuestion:
     name: DomainName
     qtype: int
-    # only IN and * supported
-    # qclass: int
+    qclass: int
 
     def __post_init__(self):
         assert has_bits(self.qtype, 16)
@@ -74,8 +65,7 @@ class DNSQuestion:
 class DNSResourceRecord:
     name: DomainName
     type_: int
-    # only IN supported
-    # class_: int
+    class_: int
     ttl: int
     data: bytes
 
@@ -122,7 +112,8 @@ def dns_packet_from_bytes(data: bytes) -> DNSPacket:
         request_id = from_ne(data[:2])
         flags = data[2:4]
         is_response = (flags[0] & 0b10000000) != 0
-        supported_check((flags[0] & 0b01111000) == 0) # only QUERY supported
+        if (flags[0] & 0b01111000) != 0:
+            raise DNSNotSupportedError("Only QUERY (0) opcode is supported")
         authoritative_answer = (flags[0] & 0b00000100) != 0
         truncation = (flags[0] & 0b00000010) != 0
         recursion_desired = (flags[0] & 0b00000001) != 0
@@ -163,10 +154,8 @@ def questions_from_bytes(data: bytes, offset: int, count: int) -> tuple[int, lis
         offset, name = domain_name_from_bytes(data, offset)
         qtype = from_ne(data[offset:offset + 2])
         qclass = from_ne(data[offset + 2:offset + 4])
-        supported_check(qtype not in [252, 253, 254]) # AXFR, MAILB, MAILA not supported
-        supported_check(qclass in [1, 255]) # IN, * supported
         offset += 4
-        questions.append(DNSQuestion(name, qtype))
+        questions.append(DNSQuestion(name, qtype, qclass))
     return offset, questions
 
 def resource_records_from_bytes(data: bytes, offset: int, count: int) -> tuple[int, list[DNSResourceRecord]]:
@@ -175,12 +164,11 @@ def resource_records_from_bytes(data: bytes, offset: int, count: int) -> tuple[i
         offset, name = domain_name_from_bytes(data, offset)
         type_ = from_ne(data[offset:offset + 2])
         class_ = from_ne(data[offset + 2:offset + 4])
-        supported_check(class_ == 1) # only IN supported
         ttl = from_ne(data[offset + 4:offset + 8])
         data_len = from_ne(data[offset + 8:offset + 10])
         request_data = data[offset + 10:offset + 10 + data_len]
         offset += 10 + data_len
-        records.append(DNSResourceRecord(name, type_, ttl, request_data))
+        records.append(DNSResourceRecord(name, type_, class_, ttl, request_data))
     return offset, records
 
 def domain_name_from_bytes(data: bytes, offset: int) -> tuple[int, DomainName]:

@@ -1,0 +1,15 @@
+1. 140.91.198.109 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 62.67.24.18 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "Level 3 Communications, Inc.", Organization: "Frankfurt Customer Links", Autonomous System: "AS3356 Level 3 Parent, LLC"
+3. 62.67.24.17 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "Level 3 Communications, Inc.", Organization: "Frankfurt Customer Links", Autonomous System: "AS3356 Level 3 Parent, LLC", Reverse DNS: ae71.edge8.Frankfurt1.Level3.net
+4. 62.67.18.62 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "Level 3 Communications, Inc.", Organization: "Frankfurt Customer Links", Autonomous System: "AS3356 Level 3 Parent, LLC", Reverse DNS: 1BLU-AG.ear5.Frankfurt1.Level3.net
+5. ?.?.?.? - No response within 5 seconds
+6. ?.?.?.? - No response within 5 seconds
+7. ?.?.?.? - No response within 5 seconds
+8. ?.?.?.? - No response within 5 seconds
+9. ?.?.?.? - No response within 5 seconds
+10. ?.?.?.? - No response within 5 seconds
+11. ?.?.?.? - No response within 5 seconds
+12. ?.?.?.? - No response within 5 seconds
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

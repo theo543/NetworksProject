@@ -1,0 +1,18 @@
+1. 140.91.198.104 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 80.81.196.168 - Country: "Germany", Region: "North Rhine-Westphalia", City: "Cologne", 50.9485, 6.90934, ISP: "CIX Management GmbH", Organization: "DE-CIX Management GmbH", Autonomous System: "", Reverse DNS: ipv4.de-cix.fra.de.as31898.oracle.com
+3. ?.?.?.? - No response within 5 seconds
+4. ?.?.?.? - No response within 5 seconds
+5. 41.78.188.132 - Country: "South Africa", Region: "Gauteng", City: "Sandton", -26.1082, 28.0591, ISP: "Workonline Communications(Pty) Ltd", Organization: "", Autonomous System: "AS37271 Workonline Communications(Pty) Ltd", Reverse DNS: cr1-lhx-et32.wolcomm.net
+6. 197.157.79.137 - Country: "South Africa", Region: "Gauteng", City: "Bryanston", -26.0531, 28.0327, ISP: "WOLCOMM-EDGE", Organization: "", Autonomous System: "AS37271 Workonline Communications(Pty) Ltd"
+7. 206.223.136.22 - Country: "South Africa", Region: "Gauteng", City: "Midrand", -25.9869, 28.1287, ISP: "ZA CENTRAL REGISTRY NPC", Organization: "ZA CENTRAL REGISTRY NPC", Autonomous System: "AS6968 ZA CENTRAL REGISTRY NPC", Reverse DNS: vlan20.ge0-2-cisufrm2.coza.net.za
+8. ?.?.?.? - No response within 5 seconds
+9. ?.?.?.? - No response within 5 seconds
+10. ?.?.?.? - No response within 5 seconds
+11. ?.?.?.? - No response within 5 seconds
+12. ?.?.?.? - No response within 5 seconds
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+16. ?.?.?.? - No response within 5 seconds
+17. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

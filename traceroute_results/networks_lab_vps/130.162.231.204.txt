@@ -1,0 +1,3 @@
+1. 140.91.198.154 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 130.162.231.204 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Cloud Infrastructure (eu-frankfurt-1)", Autonomous System: "AS31898 Oracle Corporation", ICMP Response: Port Unreachable
+Reached destination

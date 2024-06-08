@@ -1,0 +1,12 @@
+1. 140.91.198.107 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 213.248.86.97 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1282, 8.60144, ISP: "Arelion Sweden AB", Organization: "Arelion", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: oracle-ic-357467.ip.twelve99-cust.net
+3. 213.248.86.96 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1282, 8.60144, ISP: "Arelion Sweden AB", Organization: "Arelion", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ffm-b5-link.ip.twelve99.net
+4. 62.115.136.218 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "TELIANET", Organization: "Telia Company AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: ffm-bb2-link.ip.twelve99.net
+5. ?.?.?.? - No response within 5 seconds
+6. 62.115.156.163 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.0987, 8.63226, ISP: "Arelion Sweden AB", Organization: "Arelion Sweden AB", Autonomous System: "AS1299 Arelion Sweden AB", Reverse DNS: orangeromania-ic-384378.ip.twelve99-cust.net
+7. ?.?.?.? - No response within 5 seconds
+8. ?.?.?.? - No response within 5 seconds
+9. ?.?.?.? - No response within 5 seconds
+10. 92.86.30.10 - Country: "Romania", Region: "Botoșani County", City: "Flămânzi", 47.5483, 26.8613, ISP: "Romtelecom", Organization: "", Autonomous System: "AS9050 ORANGE ROMANIA COMMUNICATION S.A", Reverse DNS: adsl92-86-30-10.romtelecom.net
+11. 193.226.51.38 - Country: "Romania", Region: "București", City: "Bucharest", 44.4299, 26.0632, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS6693 Universitatea Bucuresti", Reverse DNS: cs.unibuc.ro
+Reached destination

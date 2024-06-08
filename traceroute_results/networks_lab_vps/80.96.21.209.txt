@@ -1,0 +1,18 @@
+1. 140.91.198.155 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 80.81.196.168 - Country: "Germany", Region: "North Rhine-Westphalia", City: "Cologne", 50.9485, 6.90934, ISP: "CIX Management GmbH", Organization: "DE-CIX Management GmbH", Autonomous System: "", Reverse DNS: ipv4.de-cix.fra.de.as31898.oracle.com
+3. 80.81.192.54 - Country: "Germany", Region: "North Rhine-Westphalia", City: "Cologne", 50.9485, 6.90934, ISP: "CIX Management GmbH", Organization: "DE-CIX Management GmbH", Autonomous System: "", Reverse DNS: ipv4.de-cix.fra.de.as9050.telekom.ro
+4. ?.?.?.? - No response within 5 seconds
+5. ?.?.?.? - No response within 5 seconds
+6. ?.?.?.? - No response within 5 seconds
+7. 92.86.30.10 - Country: "Romania", Region: "Botoșani County", City: "Flămânzi", 47.5483, 26.8613, ISP: "Romtelecom", Organization: "", Autonomous System: "AS9050 ORANGE ROMANIA COMMUNICATION S.A", Reverse DNS: adsl92-86-30-10.romtelecom.net
+8. ?.?.?.? - No response within 5 seconds
+9. ?.?.?.? - No response within 5 seconds
+10. ?.?.?.? - No response within 5 seconds
+11. ?.?.?.? - No response within 5 seconds
+12. ?.?.?.? - No response within 5 seconds
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+16. ?.?.?.? - No response within 5 seconds
+17. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

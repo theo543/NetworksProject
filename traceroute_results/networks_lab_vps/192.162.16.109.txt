@@ -1,0 +1,22 @@
+1. 140.91.198.110 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 80.81.196.168 - Country: "Germany", Region: "North Rhine-Westphalia", City: "Cologne", 50.9485, 6.90934, ISP: "CIX Management GmbH", Organization: "DE-CIX Management GmbH", Autonomous System: "", Reverse DNS: ipv4.de-cix.fra.de.as31898.oracle.com
+3. 80.81.192.173 - Country: "Germany", Region: "North Rhine-Westphalia", City: "Cologne", 50.9485, 6.90934, ISP: "CIX Management GmbH", Organization: "DE-CIX Management GmbH", Autonomous System: "", Reverse DNS: fra-ix.geant.net
+4. ?.?.?.? - No response within 5 seconds
+5. 62.40.98.243 - Country: "United Kingdom", Region: "England", City: "Cambridge", 52.1917, 0.133608, ISP: "GEANT European Backbone", Organization: "", Autonomous System: "AS20965 GEANT Vereniging", Reverse DNS: ae5.mx1.vie.at.geant.net
+6. 83.97.89.242 - Country: "United Kingdom", Region: "England", City: "Cambridge", 52.2053, 0.121817, ISP: "Geant IAS VRF", Organization: "GEANT Limited", Autonomous System: "AS21320 GEANT Vereniging", Reverse DNS: roedunet-ias-gw.mx1.vie.at.geant.net
+7. 37.128.239.2 - Country: "Romania", Region: "București", City: "Bucharest", 44.4444, 26.0964, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare", Reverse DNS: te-0-1-0-0.core1.nat.roedu.net
+8. 37.128.239.146 - Country: "Romania", Region: "București", City: "Bucharest", 44.4444, 26.0964, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare", Reverse DNS: hu-0-2-0-0.core3.nat.roedu.net
+9. 37.128.239.102 - Country: "Romania", Region: "București", City: "Bucharest", 44.4444, 26.0964, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare", Reverse DNS: hu-0-2-0-0.core2.buc.roedu.net
+10. 37.128.232.178 - Country: "Romania", Region: "București", City: "Bucharest", 44.4268, 26.1025, ISP: "Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si C", Organization: "AARNIEC RoEduNet NOCs", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare", Reverse DNS: po-13.acc1.buc.roedu.net
+11. 37.128.225.114 - Country: "Romania", Region: "București", City: "Bucharest", 44.4447, 26.0959, ISP: "Romanian Education Network", Organization: "", Autonomous System: "AS2614 Agentia de Administrare a Retelei Nationale de Informatica pentru Educatie si Cercetare"
+12. ?.?.?.? - No response within 5 seconds
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+16. ?.?.?.? - No response within 5 seconds
+17. ?.?.?.? - No response within 5 seconds
+18. ?.?.?.? - No response within 5 seconds
+19. ?.?.?.? - No response within 5 seconds
+20. ?.?.?.? - No response within 5 seconds
+21. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

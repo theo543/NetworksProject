@@ -1,0 +1,23 @@
+1. 140.91.198.154 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 80.81.196.168 - Country: "Germany", Region: "North Rhine-Westphalia", City: "Cologne", 50.9485, 6.90934, ISP: "CIX Management GmbH", Organization: "DE-CIX Management GmbH", Autonomous System: "", Reverse DNS: ipv4.de-cix.fra.de.as31898.oracle.com
+3. ?.?.?.? - No response within 5 seconds
+4. ?.?.?.? - No response within 5 seconds
+5. ?.?.?.? - No response within 5 seconds
+6. ?.?.?.? - No response within 5 seconds
+7. ?.?.?.? - No response within 5 seconds
+8. 64.62.205.38 - Country: "United States", Region: "California", City: "Fremont", 37.49, -121.931, ISP: "Hurricane Electric LLC", Organization: "Hurricane Electric", Autonomous System: "AS6939 Hurricane Electric LLC", Reverse DNS: university-of-hawaii.e0-15.switch2.hnl1.he.net
+9. 64.62.205.38 - Country: "United States", Region: "California", City: "Fremont", 37.49, -121.931, ISP: "Hurricane Electric LLC", Organization: "Hurricane Electric", Autonomous System: "AS6939 Hurricane Electric LLC", Reverse DNS: university-of-hawaii.e0-15.switch2.hnl1.he.net
+10. 205.166.205.47 - Country: "United States", Region: "Hawaii", City: "Honolulu", 21.2989, -157.817, ISP: "University of Hawaii", Organization: "University of Hawaii", Autonomous System: "AS6360 University of Hawaii", Reverse DNS: xe-0-0-0-73-coconut-re0.uhnet.net
+11. 128.171.213.2 - Country: "United States", Region: "Hawaii", City: "Honolulu", 21.3133, -157.823, ISP: "University of Hawaii", Organization: "University of Hawaii", Autonomous System: "AS6360 University of Hawaii", Reverse DNS: vl-669-dccolol3.uhnet.net
+12. 128.171.213.2 - Country: "United States", Region: "Hawaii", City: "Honolulu", 21.3133, -157.823, ISP: "University of Hawaii", Organization: "University of Hawaii", Autonomous System: "AS6360 University of Hawaii", Reverse DNS: vl-669-dccolol3.uhnet.net
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+16. ?.?.?.? - No response within 5 seconds
+17. ?.?.?.? - No response within 5 seconds
+18. ?.?.?.? - No response within 5 seconds
+19. ?.?.?.? - No response within 5 seconds
+20. ?.?.?.? - No response within 5 seconds
+21. ?.?.?.? - No response within 5 seconds
+22. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

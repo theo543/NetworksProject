@@ -1,0 +1,16 @@
+1. 140.91.198.108 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1049, 8.6295, ISP: "Oracle Corporation", Organization: "Oracle Corporation", Autonomous System: "AS31898 Oracle Corporation"
+2. 62.67.24.18 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "Level 3 Communications, Inc.", Organization: "Frankfurt Customer Links", Autonomous System: "AS3356 Level 3 Parent, LLC"
+3. 62.67.24.17 - Country: "Germany", Region: "Hesse", City: "Frankfurt am Main", 50.1109, 8.68213, ISP: "Level 3 Communications, Inc.", Organization: "Frankfurt Customer Links", Autonomous System: "AS3356 Level 3 Parent, LLC", Reverse DNS: ae71.edge8.Frankfurt1.Level3.net
+4. 171.75.10.131 - Country: "United Kingdom", Region: "England", City: "London", 51.5287, -0.100964, ISP: "Level 3 Communications, Inc.", Organization: "Lumen Technologies UK Limited", Autonomous System: "AS3356 Level 3 Parent, LLC", Reverse DNS: ae1.3122.edge9.frf1.neo.colt.net
+5. 195.16.160.78 - Country: "Germany", Region: "Free and Hanseatic City of Hamburg", City: "Hamburg", 53.548, 10.0429, ISP: "Level 3 Europe", Organization: "", Autonomous System: "AS3356 Level 3 Parent, LLC", Reverse DNS: p0-0-0.dblnir2-cr2.bbnplanet.net
+6. ?.?.?.? - No response within 5 seconds
+7. ?.?.?.? - No response within 5 seconds
+8. ?.?.?.? - No response within 5 seconds
+9. ?.?.?.? - No response within 5 seconds
+10. ?.?.?.? - No response within 5 seconds
+11. ?.?.?.? - No response within 5 seconds
+12. ?.?.?.? - No response within 5 seconds
+13. ?.?.?.? - No response within 5 seconds
+14. ?.?.?.? - No response within 5 seconds
+15. ?.?.?.? - No response within 5 seconds
+Limit of 10 consecutive timeouts reached

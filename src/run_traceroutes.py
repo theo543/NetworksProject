@@ -40,7 +40,8 @@ def main():
         assert sys.executable is not None
         script = Path(__file__).parent / TRACEROUTE_SCRIPT_NAME
         with output_file.open("w") as stdout, error_file.open("w") as stderr:
-            proc = subprocess.run([sys.executable, script, ip_address] + sys.argv[2:], stdout=stdout, stderr=stderr, check=False)
+            # -u to disable buffering so output is seen in real time
+            proc = subprocess.run([sys.executable, "-u", script, ip_address] + sys.argv[2:], stdout=stdout, stderr=stderr, check=False)
             if proc.returncode != 0:
                 print(f"Warning: traceroute for {ip_address} returned exit code {proc.returncode}.")
         if error_file.stat().st_size == 0 and proc.returncode == 0:

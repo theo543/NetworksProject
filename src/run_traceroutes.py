@@ -9,8 +9,8 @@ OUTPUT_FOLDER_NAME = "traceroute_results"
 TRACEROUTE_SCRIPT_NAME = "traceroute.py"
 
 def main():
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <network_name>")
+    if len(sys.argv) < 2:
+        print(f"Usage: {sys.argv[0]} <network_name> [additional args for traceroute.py]")
         sys.exit(1)
     network_name = sys.argv[1]
 
@@ -40,7 +40,7 @@ def main():
         assert sys.executable is not None
         script = Path(__file__).parent / TRACEROUTE_SCRIPT_NAME
         with output_file.open("w") as stdout, error_file.open("w") as stderr:
-            proc = subprocess.run([sys.executable, script, ip_address], stdout=stdout, stderr=stderr, check=False)
+            proc = subprocess.run([sys.executable, script, ip_address] + sys.argv[2:], stdout=stdout, stderr=stderr, check=False)
             if proc.returncode != 0:
                 print(f"Warning: traceroute for {ip_address} returned exit code {proc.returncode}.")
         if error_file.stat().st_size == 0 and proc.returncode == 0:

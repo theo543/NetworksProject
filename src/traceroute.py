@@ -6,6 +6,7 @@ import time
 from ipaddress import IPv4Address
 from dataclasses import dataclass
 import logging
+from argparse import ArgumentParser
 
 import requests
 
@@ -202,14 +203,18 @@ ICMP_HUMAN_READABLE_NAMES : dict[tuple[int, int], str] = {
 
 def main():
     signal.signal(signal.SIGINT, lambda _signal, _frame: sys.exit(1)) # exit on Ctrl+C without exception trace
-
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <destination>", file=sys.stderr)
-        sys.exit(1)
-
     logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
-    timeout = 5
+    parse = ArgumentParser("traceroute.py")
+    parse.add_argument("target", type=str, help="Target IP address for traceroute.")
+    parse.add_argument("--icmp-timeout", required=False, default=5, type=float,
+        help="Seconds to wait for an ICMP Time Exceeded or Destination Unreachable from a hop before giving up and assuming that hop will not respond."
+    )
+
+    args = parse.parse_args()
+    trace_destination: str = args.target
+    timeout: float = args.icmp_timeout
+
     consecutive_timeout_limit = 10
 
     trace_destination = sys.argv[1].strip()

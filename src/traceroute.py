@@ -44,7 +44,7 @@ def check_internet_checksum(data: bytes) -> bool:
     # succeeds.
     return checksum == 0xffff
 
-def get_ip_info(ip: IPv4Address, timeout: int) -> str:
+def get_ip_info(ip: IPv4Address, timeout: float) -> str:
     if ip.is_private:
         return "No IP info available: private range"
 
@@ -103,7 +103,7 @@ class TraceRouteResult:
     icmp_type: int
     icmp_code: int
 
-def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: int, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> TraceRouteResult | None:
+def traceroute(ip: IPv4Address, destination_port: int, ttl: int, timeout: float, udp_send_sock: socket.socket, icmp_recv_socket: socket.socket) -> TraceRouteResult | None:
     udp_send_sock.setsockopt(socket.IPPROTO_IP, socket.IP_TTL, ttl)
 
     source_port = udp_send_sock.getsockname()[1] # socket name is (ip, port)

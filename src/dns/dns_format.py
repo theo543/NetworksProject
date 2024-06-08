@@ -3,10 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 
-class DNSNotSupportedError(Exception):
+class DNSException(Exception):
     pass
 
-class DNSFormatError(Exception):
+class DNSNotSupportedException(DNSException):
+    pass
+
+class DNSFormatException(DNSException):
     pass
 
 def to_ne(data: int, size: int) -> bytes:
@@ -44,6 +47,13 @@ class DNSPacket:
         assert has_bits(len(self.authorities), 16)
         assert has_bits(len(self.additional), 16)
 
+    def to_bytes(self) -> bytes:
+        return dns_packet_to_bytes(self)
+
+    @classmethod
+    def from_bytes(cls, data: bytes) -> DNSPacket:
+        return dns_packet_from_bytes(data)
+
 class ResponseCode(Enum):
     NO_ERROR = 0
     FORMAT_ERROR = 1
@@ -77,6 +87,15 @@ class DNSResourceRecord:
 @dataclass
 class DomainName:
     labels: list[bytes]
+
+    @classmethod
+    def from_str(cls, name: str) -> DomainName:
+        labels = [label.encode("ascii") for label in name.split(".") if len(label) > 0]
+        labels.append(b"")
+        return cls(labels)
+
+    def to_str(self) -> str:
+        return self.__str__()
 
     def __post_init__(self):
         assert len(self.labels) > 0
@@ -113,7 +132,7 @@ def dns_packet_from_bytes(data: bytes) -> DNSPacket:
         flags = data[2:4]
         is_response = (flags[0] & 0b10000000) != 0
         if (flags[0] & 0b01111000) != 0:
-            raise DNSNotSupportedError("Only QUERY (0) opcode is supported")
+            raise DNSNotSupportedException("Only QUERY (0) opcode is supported")
         authoritative_answer = (flags[0] & 0b00000100) != 0
         truncation = (flags[0] & 0b00000010) != 0
         recursion_desired = (flags[0] & 0b00000001) != 0
@@ -146,7 +165,7 @@ def dns_packet_from_bytes(data: bytes) -> DNSPacket:
             additional=additional,
         )
     except IndexError as exc:
-        raise DNSFormatError() from exc
+        raise DNSFormatException() from exc
 
 def questions_from_bytes(data: bytes, offset: int, count: int) -> tuple[int, list[DNSQuestion]]:
     questions: list[DNSQuestion] = []

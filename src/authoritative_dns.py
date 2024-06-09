@@ -14,7 +14,18 @@ class DNSRecord:
     record_type: int
     record_data: bytes
 
-def parse_file(file_name: str) -> list[DNSRecord]:
+@dataclass
+class Delegation:
+    name: DomainName
+    dst_name: str
+    dst_port: int
+
+@dataclass
+class Config:
+    delegations: list[Delegation]
+    records: list[DNSRecord]
+
+def parse_file(file_name: str) -> Config:
     record_types = {
         "A": 1,
         "AAAA": 28,
@@ -22,6 +33,7 @@ def parse_file(file_name: str) -> list[DNSRecord]:
         "NS": 2,
         "TXT": 16,
     }
+    delegations: list[Delegation] = []
     records: list[DNSRecord] = []
     with open(file_name, encoding="ascii") as file:
         for line in file:
@@ -36,6 +48,16 @@ def parse_file(file_name: str) -> list[DNSRecord]:
                 ttl = int(tokens[1])
             except ValueError as e:
                 raise InvalidConfigFile(f"Invalid TTL: {tokens[1]}") from e
+            if tokens[2] == "DELEGATE":
+                tokens_3 = tokens[3].split(":")
+                if len(tokens_3) != 2:
+                    raise InvalidConfigFile(f"Invalid delegation: {line}")
+                try:
+                    port = int(tokens_3[1])
+                except ValueError as e:
+                    raise InvalidConfigFile(f"Invalid port: {tokens_3[1]}") from e
+                delegations.append(Delegation(DomainName(name), tokens_3[0], port))
+                continue
             record_type = record_types.get(tokens[2], None)
             if record_type is None:
                 raise InvalidConfigFile(f"Invalid record type: {tokens[2]}")
@@ -50,7 +72,7 @@ def parse_file(file_name: str) -> list[DNSRecord]:
             else:
                 record_data = DomainName.from_str(record_data).to_bytes()
             records.append(DNSRecord(DomainName(name), ttl, record_type, record_data))
-    return records
+    return Config(delegations, records)
 
 def ipv4_str_to_bytes(ipv4: str) -> bytes:
     def invalid(e: Exception | None = None):
@@ -99,7 +121,7 @@ def ipv6_str_to_bytes(ipv6: str) -> bytes:
         invalid()
     return bytes(b)
 
-def authoritative_dns(records: list[DNSRecord], addr: str, port: int):
+def authoritative_dns(config: Config, addr: str, port: int):
     listener = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     listener.bind((addr, port))
     listener.settimeout(1)
@@ -132,7 +154,26 @@ def authoritative_dns(records: list[DNSRecord], addr: str, port: int):
             if len(request.questions) != 1:
                 raise DNSNotSupportedException()
             question = request.questions[0]
-            for record in records:
+            did_delegate = False
+            for delegation in config.delegations:
+                if question.name == delegation.name:
+                    # send over TCP to delegation, forwards response to client
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as delegation_socket:
+                        delegation_socket.settimeout(1)
+                        delegation_socket.connect((delegation.dst_name, delegation.dst_port))
+                        request_bytes = request.to_bytes()
+                        delegation_socket.sendall(len(request_bytes).to_bytes(2, "big"))
+                        delegation_socket.sendall(request_bytes)
+                        try:
+                            response_bytes = delegation_socket.recv(1024)
+                        except socket.timeout as e:
+                            raise DNSException() from e
+                    listener.sendto(response_bytes, (client_ip, client_port))
+                    did_delegate = True
+                    break
+            if did_delegate:
+                continue
+            for record in config.records:
                 if (record.name == question.name) and (record.record_type in (question.qtype, 2, 255)):
                     response.response_code = ResponseCode.NO_ERROR
                     destination = response.answers if record.record_type != 2 else response.authorities
@@ -145,7 +186,7 @@ def authoritative_dns(records: list[DNSRecord], addr: str, port: int):
                     ))
             for answer in response.authorities:
                 answer_ns = DomainName.from_bytes(answer.data)
-                for record in records:
+                for record in config.records:
                     if record.name == answer_ns and record.record_type in (1, 28):
                         response.additional.append(DNSResourceRecord(
                             name=record.name,

@@ -1,4 +1,6 @@
+from collections import deque
 import logging
+from threading import Thread
 from typing import cast
 import zlib
 import time
@@ -44,22 +46,26 @@ class ReassemblyBucket:
         self.remaining_frags = total_frags
         self.fragments = [None] * total_frags
         self.created_at = time.time()
-#TODO make thread safe!!!!!! add deques, don't do any processing in the direct interface calls
+
 class NetworkLayer(NetworkLayerInterface):
     transport: TransportLayerInterface | None = None
     link: LinkLayerInterface | None = None
     link_send_mtu: int
     reassembly_buffer: dict[int, ReassemblyBucket]
     last_sent_fragment_id: int
+    queued_link_layer_receive: deque[bytes]
+    queued_transport_layer_send: deque[bytes]
+    thread: Thread
+    time_since_buffer_expire: float
+    buffer_timeout: float
 
     def _expire_buffers(self):
         for frag_id, bucket in list(self.reassembly_buffer.items()):
-            if time.time() - bucket.created_at > 10:
+            if time.time() - bucket.created_at > self.buffer_timeout:
                 logging.warning("Expiring reassembly buffer for fragment ID %d", frag_id)
                 self.reassembly_buffer.pop(frag_id)
 
     def _process_fragment(self, fragment: bytes):
-        self._expire_buffers()
         crc32 = int.from_bytes(fragment[:4], "big")
         if crc32 != zlib.crc32(fragment[4:]):
             logging.warning("CRC32 mismatch in fragment")
@@ -102,12 +108,7 @@ class NetworkLayer(NetworkLayerInterface):
                 logging.warning("No transport layer interface registered")
             self.reassembly_buffer.pop(frag_id)
 
-    def receive_from_link_layer(self, network_pdus: list[bytes]):
-        logging.info(f"Network layer received {len(network_pdus)} PDUs")
-        for pdu in network_pdus:
-            self._process_fragment(pdu)
-
-    def queue_transmission_from_transport_layer(self, transport_pdus: bytes):
+    def _queue_transmission_from_transport_layer(self, transport_pdus: bytes):
         fragments = fragment_transport_pdu(transport_pdus, self.link_send_mtu, self.last_sent_fragment_id)
         self.last_sent_fragment_id = (self.last_sent_fragment_id + 1) % 65536
         if self.link is not None:
@@ -125,3 +126,33 @@ class NetworkLayer(NetworkLayerInterface):
         self.link_send_mtu = link_send_mtu
         self.reassembly_buffer = {}
         self.last_sent_fragment_id = 0
+        self.queued_link_layer_receive = deque(maxlen=1024)
+        self.queued_transport_layer_send = deque(maxlen=1024)
+        self.thread = Thread(target=self.run_thread)
+        self.thread.daemon = True
+        self.thread.start()
+        self.time_since_buffer_expire = time.time()
+        self.buffer_timeout = 10.0
+
+    def receive_from_link_layer(self, network_pdus: list[bytes]):
+        self.queued_link_layer_receive.extend(network_pdus)
+
+    def queue_transmission_from_transport_layer(self, transport_pdus: bytes):
+        self.queued_transport_layer_send.append(transport_pdus)
+
+    def run_thread(self):
+        while True:
+            if self.link is None or self.transport is None:
+                time.sleep(0.1)
+                continue
+            sleep_time = 0.1
+            if self.time_since_buffer_expire + self.buffer_timeout < time.time():
+                self._expire_buffers()
+                self.time_since_buffer_expire = time.time()
+            if len(self.queued_link_layer_receive) > 0:
+                self._process_fragment(self.queued_link_layer_receive.popleft())
+                sleep_time = 0.01
+            if len(self.queued_transport_layer_send) > 0:
+                self._queue_transmission_from_transport_layer(self.queued_transport_layer_send.popleft())
+                sleep_time = 0.01
+            time.sleep(sleep_time)

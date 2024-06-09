@@ -14,7 +14,9 @@ from dns.tunnel.interfaces import TransportLayerInterface, NetworkLayerInterface
 # variable: datagram or stream data
 
 # Stream layout:
-# TODO
+# 4 bytes: sequence number
+# 4 bytes: acknowledgement number
+# ???
 
 class TransportLayer(TransportLayerInterface):
     network: NetworkLayerInterface | None = None

@@ -19,6 +19,7 @@ class Delegation:
     name: DomainName
     dst_name: str
     dst_port: int
+    proto: int
 
 @dataclass
 class Config:
@@ -50,13 +51,16 @@ def parse_file(file_name: str) -> Config:
                 raise InvalidConfigFile(f"Invalid TTL: {tokens[1]}") from e
             if tokens[2] == "DELEGATE":
                 tokens_3 = tokens[3].split(":")
-                if len(tokens_3) != 2:
+                if len(tokens_3) != 3:
                     raise InvalidConfigFile(f"Invalid delegation: {line}")
                 try:
                     port = int(tokens_3[1])
                 except ValueError as e:
                     raise InvalidConfigFile(f"Invalid port: {tokens_3[1]}") from e
-                delegations.append(Delegation(DomainName(name), tokens_3[0], port))
+                proto = socket.SOCK_STREAM if tokens_3[2] == "TCP" else socket.SOCK_DGRAM if tokens_3[2] == "UDP" else None
+                if proto is None:
+                    raise InvalidConfigFile(f"Invalid protocol: {tokens_3[2]}")
+                delegations.append(Delegation(DomainName(name), tokens_3[0], port, proto))
                 continue
             record_type = record_types.get(tokens[2], None)
             if record_type is None:
@@ -121,6 +125,16 @@ def ipv6_str_to_bytes(ipv6: str) -> bytes:
         invalid()
     return bytes(b)
 
+def matches(name: DomainName, pattern: DomainName) -> bool:
+    name_l = reversed(name.labels)
+    pattern_l = reversed(pattern.labels)
+    for name_label, pattern_label in zip(name_l, pattern_l):
+        if pattern_label == b"*":
+            return True
+        if name_label != pattern_label:
+            return False
+    return True
+
 def authoritative_dns(config: Config, addr: str, port: int):
     listener = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     listener.bind((addr, port))
@@ -156,13 +170,14 @@ def authoritative_dns(config: Config, addr: str, port: int):
             question = request.questions[0]
             did_delegate = False
             for delegation in config.delegations:
-                if question.name == delegation.name:
+                if matches(question.name, delegation.name):
                     # send over TCP to delegation, forwards response to client
-                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as delegation_socket:
+                    with socket.socket(socket.AF_INET, delegation.proto) as delegation_socket:
                         delegation_socket.settimeout(1)
                         delegation_socket.connect((delegation.dst_name, delegation.dst_port))
                         request_bytes = request.to_bytes()
-                        delegation_socket.sendall(len(request_bytes).to_bytes(2, "big"))
+                        if delegation.proto == socket.SOCK_STREAM:
+                            delegation_socket.sendall(len(request_bytes).to_bytes(2, "big"))
                         delegation_socket.sendall(request_bytes)
                         try:
                             response_bytes = delegation_socket.recv(1024)
@@ -174,7 +189,7 @@ def authoritative_dns(config: Config, addr: str, port: int):
             if did_delegate:
                 continue
             for record in config.records:
-                if (record.name == question.name) and (record.record_type in (question.qtype, 2, 255)):
+                if (record.record_type in (question.qtype, 2, 255)) and matches(question.name, record.name):
                     response.response_code = ResponseCode.NO_ERROR
                     destination = response.answers if record.record_type != 2 else response.authorities
                     destination.append(DNSResourceRecord(

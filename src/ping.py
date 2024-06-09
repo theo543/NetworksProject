@@ -31,6 +31,7 @@ def main():
     if client is None:
         raise ValueError("Invalid mode: " + sys.argv[7])
     for _ in range(10 if client else 1):
+        logging.info("Creating thread - client = %s", client)
         th = threading.Thread(target=ping_t, args=(transport, ping_port, client))
         th.daemon = True
         th.start()

@@ -31,6 +31,12 @@ class TransportLayer(TransportLayerInterface):
         self.recently_used_ports = {}
         self.big_lock = Lock()
 
+    def _find_ephemeral_port(self) -> int:
+        for port in range(0b1000000000000000, 0b1111111111111111):
+            if port not in self.recently_used_ports and port not in self.datagram_sockets:
+                return port
+        raise ValueError("No free ephemeral ports")
+
     def _send_to_network_layer(self, pdu: bytes, source_port: int, destination_port: int, is_stream: bool):
         if self.network is None:
             logging.warning("Network layer not registered with transport layer")
@@ -88,14 +94,17 @@ class TransportLayer(TransportLayerInterface):
         with self.big_lock:
             if destination_port in self.stream_sockets:
                 raise ValueError("Already connected to port")
-            source_port = 0 # TODO: find a free port
+            source_port = self._find_ephemeral_port()
             sock = StreamSocket._init_as_client(source_port, destination_port, self)
             self.stream_sockets[(source_port, destination_port)] = sock
         return sock
 
     def create_datagram_socket(self, source_port: int) -> DatagramSocketInterface:
         with self.big_lock:
-            # TODO check if source port is in use or if 0 find a free port
+            if source_port == 0:
+                logging.info("Creating datagram socket on ephemeral port")
+                source_port = self._find_ephemeral_port()
+                logging.info("Ephemeral port is %d", source_port)
             if source_port in self.datagram_sockets:
                 raise ValueError("Port already in use")
             sock = DatagramSocket(self, source_port)

@@ -95,7 +95,16 @@ class DomainName:
         return cls(labels)
 
     def to_str(self) -> str:
-        return self.__str__()
+        return str(self)
+
+    @classmethod
+    def from_bytes(cls, data: bytes) -> DomainName:
+        offset, name = domain_name_from_bytes(data, 0)
+        assert offset == len(data)
+        return name
+
+    def to_bytes(self) -> bytes:
+        return domain_name_to_bytes(self)
 
     def __post_init__(self):
         assert len(self.labels) > 0
@@ -240,6 +249,9 @@ def dns_packet_to_bytes(packet: DNSPacket) -> bytes:
     buf += resource_records_to_bytes(packet.answers)
     buf += resource_records_to_bytes(packet.authorities)
     buf += resource_records_to_bytes(packet.additional)
+
+    if len(buf) > 512:
+        buf[2] |= 0b00000010
 
     return bytes(buf)
 

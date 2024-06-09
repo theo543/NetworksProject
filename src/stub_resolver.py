@@ -3,7 +3,7 @@ import sys
 import time
 import random
 
-from dns.dns_format import DNSPacket, DNSQuestion, DomainName, ResponseCode, DNSException
+from dns.packet import DNSPacket, DNSQuestion, DomainName, ResponseCode, DNSException
 
 RESOLVE_TIMEOUT = 5
 
@@ -71,7 +71,7 @@ def log_server(src_ip, src_port, dns_server_ip, dns_server_port):
             reserved=0,
             recursion_available=True,
             response_code=ResponseCode.NO_ERROR,
-            questions=[],
+            questions=request.questions,
             answers=[],
             authorities=[],
             additional=[],

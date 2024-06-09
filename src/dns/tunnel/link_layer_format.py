@@ -12,7 +12,10 @@ def byte_to_base36(byte: int) -> bytes:
 
 def base36_to_byte(base36: bytes) -> int:
     assert len(base36) == 2
-    return BASE36_CHARS.index(base36[0]) * 36 + BASE36_CHARS.index(base36[1])
+    try:
+        return BASE36_CHARS.index(base36[0]) * 36 + BASE36_CHARS.index(base36[1])
+    except ValueError as e:
+        raise LinkLayerMalformedData(f"Invalid base36 character: {base36}") from e
 
 def binary_to_base36(binary: bytes) -> bytes:
     b = bytearray()

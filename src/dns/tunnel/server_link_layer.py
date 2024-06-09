@@ -3,11 +3,10 @@ from collections import deque
 from threading import Thread
 import time
 import logging
-import random
 
 from dns.tunnel.interfaces import LinkLayerInterface, NetworkLayerInterface
-from dns.tunnel.link_layer_format import dns_answer_to_bin, bin_array_to_base36, base36_to_bin_array, bin_array_to_bin, bin_to_bin_array
-from dns.packet import DNSPacket, DNSQuestion, DNSResourceRecord, DomainName, ResponseCode
+from dns.tunnel.link_layer_format import base36_to_bin_array, bin_array_to_bin, LinkLayerMalformedData
+from dns.packet import DNSPacket, DNSResourceRecord, DomainName, ResponseCode, labels_eq
 
 class ServerLinkLayer(LinkLayerInterface):
     link: socket.socket
@@ -35,11 +34,15 @@ class ServerLinkLayer(LinkLayerInterface):
                 data = None
                 for query in request.questions:
                     needed_domain = self.domain_name.labels
-                    if query.name.labels[-len(needed_domain):] == needed_domain:
+                    if labels_eq(query.name.labels[-len(needed_domain):], needed_domain):
                         encoded = bytearray()
                         for label in query.name.labels[:-len(needed_domain)]:
                             encoded += label
-                        data = base36_to_bin_array(bytes(encoded))
+                        try:
+                            data = base36_to_bin_array(bytes(encoded))
+                        except LinkLayerMalformedData:
+                            logging.warning("Could not decode DNS request")
+                            continue
                         logging.info("Link layer received tunnel DNS request from %s:%d", addr[0], addr[1])
                         self.destination_addr = addr[0]
                         self.destination_port = addr[1]
@@ -85,7 +88,7 @@ class ServerLinkLayer(LinkLayerInterface):
             except socket.timeout:
                 continue
 
-    def __init__(self, listen_addr: str, listen_port: int, domain_name: DomainName, fragment_max_size: int):
+    def __init__(self, listen_addr: str, listen_port: int, domain_name: DomainName, fragment_max_size: int, response_max_size: int):
         self.listen_addr = listen_addr
         self.listen_port = listen_port
         self.destination_addr = None
@@ -96,7 +99,7 @@ class ServerLinkLayer(LinkLayerInterface):
         self.fragment_max_size = fragment_max_size
         self.send_queue = deque(maxlen=1024)
         self.domain_name = domain_name
-        self.response_max_size = 300
+        self.response_max_size = response_max_size
         self.thread = Thread(target=self._run_thread)
         self.thread.daemon = True
         self.thread.start()
@@ -105,6 +108,6 @@ class ServerLinkLayer(LinkLayerInterface):
         self.network = interface
 
     def queue_transmission_from_network_layer(self, network_pdus: list[bytes]):
-        logging.info(f"Link layer queued {len(network_pdus)} PDUs")
+        logging.info("Link layer queued %d PDUs", len(network_pdus))
         for pdu in network_pdus:
             self.send_queue.append(pdu)

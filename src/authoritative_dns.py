@@ -1,8 +1,9 @@
 from dataclasses import dataclass
+import logging
 import socket
 import sys
 
-from dns.packet import DNSPacket, DNSResourceRecord, DomainName, ResponseCode, DNSException, DNSFormatException, DNSNotSupportedException
+from dns.packet import DNSPacket, DNSResourceRecord, DomainName, ResponseCode, DNSException, DNSFormatException, DNSNotSupportedException, ascii_to_lowercase
 
 class InvalidConfigFile(Exception):
     pass
@@ -131,7 +132,7 @@ def matches(name: DomainName, pattern: DomainName) -> bool:
     for name_label, pattern_label in zip(name_l, pattern_l):
         if pattern_label == b"*":
             return True
-        if name_label != pattern_label:
+        if ascii_to_lowercase(name_label) != ascii_to_lowercase(pattern_label):
             return False
     return True
 
@@ -182,6 +183,10 @@ def authoritative_dns(config: Config, addr: str, port: int):
                         try:
                             response_bytes = delegation_socket.recv(1024)
                         except socket.timeout as e:
+                            logging.error("DELEGATION TIMEOUT")
+                            raise DNSException() from e
+                        except socket.error as e:
+                            logging.error("DELEGATION ERROR")
                             raise DNSException() from e
                     listener.sendto(response_bytes, (client_ip, client_port))
                     did_delegate = True

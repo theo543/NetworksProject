@@ -6,8 +6,8 @@ import logging
 import random
 
 from dns.tunnel.interfaces import LinkLayerInterface, NetworkLayerInterface
-from dns.tunnel.link_layer_format import dns_answer_to_bin, bin_array_to_base36, base36_to_bin_array, bin_array_to_bin, bin_to_bin_array
-from dns.packet import DNSPacket, DNSQuestion, DNSResourceRecord, DomainName, ResponseCode
+from dns.tunnel.link_layer_format import bin_array_to_base36, bin_to_bin_array
+from dns.packet import DNSPacket, DNSQuestion, DomainName, ResponseCode, labels_eq
 
 
 class ClientLinkLayer(LinkLayerInterface):
@@ -83,7 +83,7 @@ class ClientLinkLayer(LinkLayerInterface):
                     logging.warning("Received response with error code %s", response.response_code)
                     continue
                 for answer in response.answers:
-                    if answer.type_ == 1 and answer.class_ == 1 and answer.name.labels[-len(labels):] == labels:
+                    if answer.type_ == 1 and answer.class_ == 1 and labels_eq(answer.name.labels[-len(labels):], labels):
                         logging.info("Link layer received %d bytes", len(answer.data))
                         data = bin_to_bin_array(answer.data)
                         logging.info("Link layer decoded %d PDUs", len(data))
@@ -112,6 +112,6 @@ class ClientLinkLayer(LinkLayerInterface):
         self.network = interface
 
     def queue_transmission_from_network_layer(self, network_pdus: list[bytes]):
-        logging.info(f"Link layer queued {len(network_pdus)} PDUs")
+        logging.info("Link layer queued %d PDUs", len(network_pdus))
         for pdu in network_pdus:
             self.send_queue.append(pdu)

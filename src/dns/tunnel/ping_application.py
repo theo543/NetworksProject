@@ -4,7 +4,7 @@ import logging
 from dns.tunnel.transport_layer import TransportLayerInterface
 
 def ping(transport: TransportLayerInterface, destination_port: int):
-    message = bytes(random.getrandbits(8) for _ in range(2000))
+    message = bytes(random.getrandbits(8) for _ in range(500))
     ping_socket = transport.create_datagram_socket(0)
     ping_socket.push_data(message, destination_port)
     logging.info(f"Sent data to port {destination_port}")

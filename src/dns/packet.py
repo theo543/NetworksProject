@@ -286,3 +286,16 @@ def domain_name_to_bytes(name: DomainName) -> bytes:
         buf += label
 
     return bytes(buf)
+
+def ascii_to_lowercase(label: bytes) -> bytes:
+    msb = 0b10000000
+    lowercase = 0b00100000
+    def is_ascii(byte: int) -> bool:
+        return (msb & byte) == 0
+    return bytes([byte | (lowercase if is_ascii(byte) else 0) for byte in label])
+
+def labels_eq(a: list[bytes], b: list[bytes]):
+    for a_, b_ in zip(a, b):
+        if ascii_to_lowercase(a_) != ascii_to_lowercase(b_):
+            return False
+    return True

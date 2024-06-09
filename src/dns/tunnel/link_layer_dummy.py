@@ -23,12 +23,12 @@ class LinkLayerDummy(LinkLayerInterface):
                 continue
             if len(self.send_queue) > 0:
                 self.link.settimeout(0.01)
-                logging.info(f"Link layer sending one PDU, {len(self.send_queue)} PDUs in queue")
+                logging.info("Link layer sending one PDU, %d PDUs in queue", len(self.send_queue))
                 self.link.sendall(self.send_queue.popleft())
             else:
                 self.link.settimeout(0.1)
             try:
-                data, addr = self.link.recvfrom(1024)
+                data, _addr = self.link.recvfrom(1024)
                 logging.info("Link layer received 1 PDU")
                 self.network.receive_from_link_layer([data])
             except socket.timeout:
@@ -51,6 +51,6 @@ class LinkLayerDummy(LinkLayerInterface):
         self.network = interface
 
     def queue_transmission_from_network_layer(self, network_pdus: list[bytes]):
-        logging.info(f"Link layer queued {len(network_pdus)} PDUs")
+        logging.info("Link layer queued %d PDUs", len(network_pdus))
         for pdu in network_pdus:
             self.send_queue.append(pdu)

@@ -52,7 +52,14 @@ class NetworkLayer(NetworkLayerInterface):
     reassembly_buffer: dict[int, ReassemblyBucket]
     last_sent_fragment_id: int
 
+    def _expire_buffers(self):
+        for frag_id, bucket in list(self.reassembly_buffer.items()):
+            if time.time() - bucket.created_at > 10:
+                logging.warning("Expiring reassembly buffer for fragment ID %d", frag_id)
+                self.reassembly_buffer.pop(frag_id)
+
     def _process_fragment(self, fragment: bytes):
+        self._expire_buffers()
         crc32 = int.from_bytes(fragment[:4], "big")
         if crc32 != zlib.crc32(fragment[4:]):
             logging.warning("CRC32 mismatch in fragment")

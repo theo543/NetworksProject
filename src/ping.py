@@ -2,9 +2,11 @@ import sys
 import threading
 import time
 import logging
+import os
 
-from dns.tunnel.dummy_stack import init_dummy_stack
+from dns.tunnel.init_stack import init_dns_client_stack, init_dns_server_stack
 from dns.tunnel.ping_application import ping, server
+from dns.packet import DomainName
 
 def ping_t(transport, ping_port, client):
     if client:
@@ -16,14 +18,18 @@ def ping_t(transport, ping_port, client):
     logging.info("Exiting thread")
 
 def main():
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO if not os.getenv("LOGLEVEL") else os.getenv("LOGLEVEL"))
     local_stack_addr, local_stack_port, remote_stack_addr, remote_stack_port = sys.argv[1], int(sys.argv[2]), sys.argv[3], int(sys.argv[4])
     ping_port = int(sys.argv[5])
-    transport = init_dummy_stack(local_stack_addr, local_stack_port, remote_stack_addr, remote_stack_port)
+    domain_name = sys.argv[6]
+    if remote_stack_addr == "server":
+        transport = init_dns_server_stack(local_stack_addr, local_stack_port, DomainName.from_str(domain_name))
+    else:
+        transport = init_dns_client_stack(local_stack_addr, local_stack_port, remote_stack_addr, remote_stack_port, DomainName.from_str(domain_name))
     threads = []
-    client = True if sys.argv[6] == "ping" else False if sys.argv[6] == "server" else None
+    client = True if sys.argv[7] == "ping" else False if sys.argv[7] == "server" else None
     if client is None:
-        raise ValueError("Invalid mode")
+        raise ValueError("Invalid mode: " + sys.argv[7])
     for _ in range(10 if client else 1):
         th = threading.Thread(target=ping_t, args=(transport, ping_port, client))
         th.daemon = True

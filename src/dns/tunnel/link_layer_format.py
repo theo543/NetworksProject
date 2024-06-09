@@ -48,6 +48,12 @@ def bin_to_bin_array(bin: bytes) -> list[bytes]:
         raise LinkLayerMalformedData("Out of bounds while parsing binary array") from e
     return bin_array
 
+def bin_array_to_base36(bin_array: list[bytes]) -> bytes:
+    return binary_to_base36(bin_array_to_bin(bin_array))
+
+def base36_to_bin_array(base36: bytes) -> list[bytes]:
+    return bin_to_bin_array(base36_to_binary(base36))
+
 def is_suffix(full: list[bytes], suffix: list[bytes]) -> bool:
     if len(suffix) + 1 != len(full):
         return False

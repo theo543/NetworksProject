@@ -12,10 +12,10 @@ def ping(transport: TransportLayerInterface, destination_port: int):
         source_port, data = ping_socket.pop_data()
         print(f"Received data from port {source_port}")
         if source_port == destination_port and data == message:
-            logging.info("Received expected data")
+            print("Received expected data")
             break
         else:
-            logging.warning("Received unexpected data")
+            print("Received unexpected data")
 
 def server(transport: TransportLayerInterface, listen_port: int):
     server_socket = transport.create_datagram_socket(listen_port)

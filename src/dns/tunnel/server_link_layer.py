@@ -43,7 +43,7 @@ class ServerLinkLayer(LinkLayerInterface):
                         except LinkLayerMalformedData:
                             logging.warning("Could not decode DNS request")
                             continue
-                        logging.info("Link layer received tunnel DNS request from %s:%d", addr[0], addr[1])
+                        logging.debug("Link layer received tunnel DNS request from %s:%d", addr[0], addr[1])
                         self.destination_addr = addr[0]
                         self.destination_port = addr[1]
                         break
@@ -53,7 +53,6 @@ class ServerLinkLayer(LinkLayerInterface):
                 self.network.receive_from_link_layer(data)
                 fragments: list[bytes] = []
                 frag_size = 0
-                logging.info("Collecting fragments for DNS response")
                 while frag_size + self.fragment_max_size < self.response_max_size and len(self.send_queue) > 0:
                     fragments.append(self.send_queue.popleft())
                     frag_size += len(fragments[-1])

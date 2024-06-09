@@ -72,7 +72,12 @@ class ClientLinkLayer(LinkLayerInterface):
             else:
                 self.link.settimeout(0.1)
             try:
-                response, _addr = self.link.recvfrom(1024)
+                try:
+                    response, _addr = self.link.recvfrom(1024)
+                except ConnectionResetError:
+                    logging.warning("Received ICMP for a previous request")
+                    time.sleep(1)
+                    continue
                 logging.debug("Link layer received DNS response")
                 response = DNSPacket.from_bytes(response)
                 if response.request_id not in self.pending_requests:
@@ -84,9 +89,9 @@ class ClientLinkLayer(LinkLayerInterface):
                     continue
                 for answer in response.answers:
                     if answer.type_ == 1 and answer.class_ == 1 and labels_eq(answer.name.labels[-len(labels):], labels):
-                        logging.info("Link layer received %d bytes", len(answer.data))
+                        logging.debug("Link layer received %d bytes", len(answer.data))
                         data = bin_to_bin_array(answer.data)
-                        logging.info("Link layer decoded %d PDUs", len(data))
+                        logging.debug("Link layer decoded %d PDUs", len(data))
                         self.network.receive_from_link_layer(data)
             except socket.timeout:
                 continue

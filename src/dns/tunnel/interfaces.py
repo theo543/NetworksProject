@@ -57,7 +57,7 @@ class DatagramSocketInterface(TransportLayerSocket):
 
 class StreamSocketInterface(TransportLayerSocket):
     @abstractmethod
-    def pop_data(self) -> bytes:
+    def pop_data(self, amount: int) -> bytes:
         pass
     def push_data(self, data: bytes):
         pass

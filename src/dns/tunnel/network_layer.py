@@ -145,14 +145,11 @@ class NetworkLayer(NetworkLayerInterface):
             if self.link is None or self.transport is None:
                 time.sleep(0.1)
                 continue
-            sleep_time = 0.1
             if self.time_since_buffer_expire + self.buffer_timeout < time.time():
                 self._expire_buffers()
                 self.time_since_buffer_expire = time.time()
             if len(self.queued_link_layer_receive) > 0:
                 self._process_fragment(self.queued_link_layer_receive.popleft())
-                sleep_time = 0.01
             if len(self.queued_transport_layer_send) > 0:
                 self._queue_transmission_from_transport_layer(self.queued_transport_layer_send.popleft())
-                sleep_time = 0.01
-            time.sleep(sleep_time)
+            time.sleep(0.01)

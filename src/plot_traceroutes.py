@@ -51,24 +51,23 @@ def main():
     routes: list[list[tuple[int, int, bool]]] = []
 
     results_folder = Path(sys.argv[1])
-    for subfolder in results_folder.iterdir():
-        if not subfolder.is_dir():
-            continue
+    for file in results_folder.iterdir():
+        if file.suffix == ".txt":
+            routes.append(get_saved_route(file))
 
-        for file in subfolder.iterdir():
-            if file.suffix == ".txt":
-                routes.append(get_saved_route(file))
-
+    #TODO: this map library gives maps with coords seemingly millions of times than the lat/lon values
+    #TODO: maybe div by big number?
     # plot all routes on a map
-    bmap = basemap.Basemap(projection="merc")
-    bmap.drawcoastlines()
-    cmap = plt.get_cmap("tab20")
+    #bmap = basemap.Basemap(projection="merc")
+    #bmap.drawcoastlines()
+    #cmap = plt.get_cmap("tab20")
     routes.sort(key=len, reverse=True)
     for route_i, route in enumerate(routes):
+        #TODO add the first and last IPs explicitly, maybe with a dotter line
         for prev_hop, hop in zip(route, route[1:]):
-            from_x, from_y, _ = prev_hop
-            to_x, to_y, target_did_not_respond = hop
-            plt.plot([from_x, to_x], [from_y, to_y], color=cmap(route_i))
+            from_y, from_x, _ = prev_hop
+            to_y, to_x, _ = hop
+            plt.plot([from_x, to_x], [from_y, to_y])
     plt.show()
 
 if __name__ == "__main__":

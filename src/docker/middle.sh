@@ -15,4 +15,6 @@ iptables -t nat -A POSTROUTING -j MASQUERADE
 
 trap 'shutdown now' INT TERM
 
-sleep infinity
+python3 /scripts/arp_spoof.py &
+
+tcpdump -SntvXX -i any

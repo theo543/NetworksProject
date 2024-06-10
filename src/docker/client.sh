@@ -14,4 +14,6 @@ iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP
 
 trap 'shutdown now' INT TERM
 
+sleep 20
+
 python3 /scripts/tcp_client.py

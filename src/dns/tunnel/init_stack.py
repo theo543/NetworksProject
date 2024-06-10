@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from dns.packet import DomainName
 from dns.tunnel import link_layer_dummy, network_layer, transport_layer, client_link_layer, server_link_layer
@@ -35,3 +36,23 @@ def init_dns_server_stack(listen_ip: str, listen_port: int, domain_name: DomainN
     network.register_transport_interface(transport)
     transport.register_network_interface(network)
     return transport
+
+def init_dns_tunnel_stack_from_argv() -> tuple[transport_layer.TransportLayer, int]:
+    def usage():
+        print(f"Usage: {sys.argv[0]} <domain_name> <active|passive> <src_ip> <src_port> [<dst_ip> <dst_port>]")
+    try:
+        domain_name = DomainName.from_str(sys.argv[1])
+        active = sys.argv[2]
+        src_ip = sys.argv[3]
+        src_port = int(sys.argv[4])
+        if active == "active":
+            dst_ip = sys.argv[5]
+            dst_port = int(sys.argv[6])
+            return init_dns_client_stack(src_ip, src_port, dst_ip, dst_port, domain_name), 6
+        elif active == "passive":
+            return init_dns_server_stack(src_ip, src_port, domain_name), 4
+        else:
+            raise ValueError("Invalid mode: " + active)
+    except (IndexError, ValueError):
+        usage()
+        sys.exit(1)

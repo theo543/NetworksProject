@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from enum import Enum
-from ..packet import DNSPacket, DNSResourceRecord, DomainName, ResponseCode
 from abc import ABC, abstractmethod
 
 class LinkLayerInterface(ABC):
@@ -57,7 +55,7 @@ class DatagramSocketInterface(TransportLayerSocket):
 
 class StreamSocketInterface(TransportLayerSocket):
     @abstractmethod
-    def pop_data(self, amount: int) -> bytes:
+    def pop_data(self, amount: int, min_amount: int | None = None) -> bytes:
         pass
     def push_data(self, data: bytes):
         pass

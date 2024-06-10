@@ -1,10 +1,11 @@
 import logging
-import time
-from dns.tunnel import init_stack
-from dns.packet import DomainName
 import sys
 import threading
+import time
 from collections import deque
+
+from dns.packet import DomainName
+from dns.tunnel import init_stack
 
 def read_input(input_buf):
     while True:

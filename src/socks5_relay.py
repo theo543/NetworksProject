@@ -15,7 +15,7 @@ class SOCKS5ConnectionError(Exception):
 
 def conn_handler(sock: StreamSocketInterface):
     addr_type = sock.pop_data(1)
-    addr_len = int.from_bytes(sock.pop_data(1))
+    addr_len = int.from_bytes(sock.pop_data(1), "big")
     addr = sock.pop_data(addr_len)
     match addr_type:
         case b"\x01":
@@ -45,12 +45,16 @@ def conn_handler(sock: StreamSocketInterface):
     else:
         sock.push_data(b"\x01")
         to_send_addr = socket.inet_pton(socket.AF_INET, bind_addr)
-    sock.push_data(len(to_send_addr).to_bytes(1))
+    sock.push_data(len(to_send_addr).to_bytes(1, "big"))
     sock.push_data(to_send_addr)
     sock.push_data(bind_port.to_bytes(2, "big"))
+    internet_sock.settimeout(0.05)
     while True:
         received_from_tunnel = sock.pop_data(1024, 0)
-        received_from_internet = internet_sock.recv(1024)
+        try:
+            received_from_internet = internet_sock.recv(1024)
+        except socket.timeout:
+            received_from_internet = b""
         if not received_from_tunnel and not received_from_internet:
             time.sleep(0.1)
             continue

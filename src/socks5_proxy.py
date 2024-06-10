@@ -1,3 +1,4 @@
+import logging
 from threading import Thread
 import socket
 import time
@@ -50,31 +51,36 @@ def conn_handler(transport: TransportLayerInterface, virtual_port: int, conn: so
     if response != b"\x00":
         conn.close()
         return
+    conn.settimeout(0.05)
     while True:
         received_from_tunnel = relay_sock.pop_data(1024, 0)
-        received_from_internet = conn.recv(1024)
+        try:
+            received_from_internet = conn.recv(1024)
+        except socket.timeout:
+            received_from_internet = b""
         if not received_from_tunnel and not received_from_internet:
             time.sleep(0.1)
             continue
         if received_from_tunnel:
+            logging.info("Sending %d bytes from tunnel to internet", len(received_from_tunnel))
             conn.sendall(received_from_tunnel)
         if received_from_internet:
+            logging.info("Sending %d bytes from internet to tunnel", len(received_from_internet))
             relay_sock.push_data(received_from_internet)
 
 def accept():
     transport, args_read = init_dns_tunnel_stack_from_argv()
-    virtual_port = int(sys.argv[args_read])
-    listen_interface = sys.argv[args_read + 1]
-    listen_port = int(sys.argv[args_read + 2])
+    virtual_port = int(sys.argv[args_read + 1])
+    listen_interface = sys.argv[args_read + 2]
+    listen_port = int(sys.argv[args_read + 3])
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((listen_interface, listen_port))
     sock.listen(5)
     while True:
-        conns = sock.accept()
-        for conn in conns:
-            t = Thread(target=conn_handler, args=(transport, virtual_port, conn))
-            t.daemon = True
-            t.start()
+        (conn, _addr) = sock.accept()
+        t = Thread(target=conn_handler, args=(transport, virtual_port, conn))
+        t.daemon = True
+        t.start()
 
 def main():
     t = Thread(target=accept)

@@ -97,8 +97,6 @@ class TransportLayer(TransportLayerInterface):
 
     def connect_stream(self, destination_port: int) -> StreamSocket:
         with self.big_lock:
-            if destination_port in self.stream_sockets:
-                raise ValueError("Already connected to port")
             source_port = self._find_ephemeral_port()
             sock = StreamSocket._init_as_client(source_port, destination_port, self)
             self.stream_sockets[(source_port, destination_port)] = sock
@@ -163,11 +161,11 @@ class StreamSocket(StreamSocketInterface):
     destination_port: int
     received_bytes_lock: Lock
     received_bytes_cv: Condition
-    received_bytes: bytearray
+    received_bytes: bytes
     last_received_transmission_id: int
     pending_transmission_lock: Lock
     pending_transmission_cv: Condition
-    pending_transmission: bytearray
+    pending_transmission: bytes
     currently_transmitting: bytes # saved in case of retransmission
     currently_transmitting_id: int
     data_transmitted_at: float
@@ -177,11 +175,11 @@ class StreamSocket(StreamSocketInterface):
     closing: bool
     thread: Thread
 
-    def __init__(self, transport: TransportLayer, source_port: int, destination_port):
+    def __init__(self, transport: TransportLayer, source_port: int, destination_port: int):
         logging.info("Creating stream socket from %d to %d", source_port, destination_port)
         self.transport = transport
-        self.received_bytes = bytearray()
-        self.pending_transmission = bytearray()
+        self.received_bytes = bytes()
+        self.pending_transmission = bytes()
         self.received_pdus = deque()
         self.received_bytes_lock = Lock()
         self.received_bytes_cv = Condition(self.received_bytes_lock)

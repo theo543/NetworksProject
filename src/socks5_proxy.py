@@ -73,7 +73,11 @@ def accept():
     virtual_port = int(sys.argv[args_read + 1])
     listen_interface = sys.argv[args_read + 2]
     listen_port = int(sys.argv[args_read + 3])
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        socket.inet_pton(socket.AF_INET6, listen_interface)
+        sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    except OSError:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((listen_interface, listen_port))
     sock.listen(5)
     while True:

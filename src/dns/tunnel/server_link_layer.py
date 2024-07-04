@@ -93,7 +93,11 @@ class ServerLinkLayer(LinkLayerInterface):
         self.destination_addr = None
         self.destination_port = 0
         self.pending_requests = set()
-        self.link = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            socket.inet_pton(socket.AF_INET6, listen_addr)
+            self.link = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+        except OSError:
+            self.link = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.link.bind((listen_addr, listen_port))
         self.fragment_max_size = fragment_max_size
         self.send_queue = deque(maxlen=1024)

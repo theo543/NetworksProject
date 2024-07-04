@@ -102,7 +102,12 @@ class ClientLinkLayer(LinkLayerInterface):
         self.destination_addr = destination_addr
         self.destination_port = destination_port
         self.pending_requests = set()
-        self.link = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            socket.inet_pton(socket.AF_INET6, listen_addr)
+            socket.inet_pton(socket.AF_INET6, destination_addr)
+            self.link = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+        except OSError:
+            self.link = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.link.bind((listen_addr, listen_port))
         self.link.connect((destination_addr, destination_port))
         self.fragment_max_size = fragment_max_size

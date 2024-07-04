@@ -36,7 +36,8 @@ def conn_handler(sock: StreamSocketInterface):
         raise SOCKS5ConnectionError(0x05) from e # Connection refused
     except OSError as e:
         raise SOCKS5ConnectionError(0x01) from e # General error
-    bind_addr, bind_port = internet_sock.getsockname()
+    sock_name = internet_sock.getsockname()
+    bind_addr, bind_port = sock_name[0], sock_name[1]
     logging.info("Connected to %s:%d", addr_decoded, port)
     sock.push_data(b"\x00")
     if ":" in bind_addr:
